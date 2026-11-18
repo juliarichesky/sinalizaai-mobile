@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'core/theme/app_theme.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: AppTheme.light,
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const SplashScreen(
+        nextScreen: MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
@@ -89,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: .center,
           children: [
-            const Text('You have pushed the button this many times:'),
+            const Text('You have pushed the button this many timesss:'),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
