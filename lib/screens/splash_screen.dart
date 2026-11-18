@@ -7,9 +7,7 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key, required this.nextScreen});
-
-  final Widget nextScreen;
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -17,22 +15,21 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Timer? _timer;
+  bool _showLoading = true;
 
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    _timer = Timer(const Duration(seconds: 2), _goToNextScreen);
+    _timer = Timer(const Duration(seconds: 2), _finishLoading);
   }
 
-  void _goToNextScreen() {
+  void _finishLoading() {
     if (!mounted) {
       return;
     }
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute<void>(builder: (_) => widget.nextScreen),
-    );
+    setState(() => _showLoading = false);
   }
 
   @override
@@ -56,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
         body: Stack(
           fit: StackFit.expand,
           children: [
-            Image.asset('assets/splash/splash_img.png', fit: BoxFit.cover),
+            Image.asset('assets/images/splash_img.png', fit: BoxFit.cover),
             Align(
               alignment: const Alignment(0, -0.45),
               child: Padding(
@@ -91,21 +88,22 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 48,
-              left: 0,
-              right: 0,
-              child: const Center(
-                child: SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator(
-                    color: AppColors.sunflowerGold,
-                    strokeWidth: 2.5,
+            if (_showLoading)
+              const Positioned(
+                bottom: 48,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      color: AppColors.sunflowerGold,
+                      strokeWidth: 2.5,
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ),
