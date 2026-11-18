@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'core/theme/app_theme.dart';
+import 'screens/login_screen.dart';
 import 'screens/splash_screen.dart';
 
 void main() {
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sinaliza.Ai',
       theme: AppTheme.light,
-      home: const SplashScreen(),
+      home: const SplashScreen(nextScreen: LoginScreen()),
     );
   }
 }

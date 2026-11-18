@@ -5,9 +5,12 @@ import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
+import '../widgets/app_button.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({super.key, required this.nextScreen});
+
+  final Widget nextScreen;
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -15,21 +18,30 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Timer? _timer;
-  bool _showLoading = true;
 
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    _timer = Timer(const Duration(seconds: 2), _finishLoading);
+    _timer = Timer(const Duration(seconds: 2), _goToNextScreen);
   }
 
-  void _finishLoading() {
+  void _goToNextScreen() {
     if (!mounted) {
       return;
     }
 
-    setState(() => _showLoading = false);
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(builder: (_) => widget.nextScreen),
+    );
+  }
+
+  void _showSignupMessage() {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        const SnackBar(content: Text('Cadastro disponível em breve.')),
+      );
   }
 
   @override
@@ -88,22 +100,47 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
             ),
-            if (_showLoading)
-              const Positioned(
-                bottom: 48,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: CircularProgressIndicator(
-                      color: AppColors.sunflowerGold,
-                      strokeWidth: 2.5,
+            Positioned(
+              bottom: 32,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: AppButton(
+                        text: 'Entrar',
+                        onPressed: _goToNextScreen,
+                      ),
                     ),
-                  ),
+                    TextButton(
+                      onPressed: _showSignupMessage,
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: Text(
+                        'Criar conta',
+                        style: AppTypography.body.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          shadows: const [
+                            Shadow(
+                              color: AppColors.darkAmethyst,
+                              blurRadius: 6,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
+            ),
           ],
         ),
       ),
