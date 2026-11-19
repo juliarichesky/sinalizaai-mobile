@@ -5,6 +5,7 @@ import '../core/theme/app_typography.dart';
 import '../data/mock_map_points.dart';
 import '../data/mock_shelters.dart';
 import '../widgets/app_bottom_navigation.dart';
+import '../widgets/app_snackbar.dart';
 import 'alerts_screen.dart';
 import 'home_screen.dart';
 import 'shelter_detail_screen.dart';
@@ -99,9 +100,7 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+    AppSnackBar.show(context, message);
   }
 
   void _handleNavigation(int index) {

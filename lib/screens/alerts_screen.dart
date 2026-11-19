@@ -4,6 +4,7 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 import '../data/mock_alerts.dart';
 import '../widgets/app_bottom_navigation.dart';
+import '../widgets/app_snackbar.dart';
 import 'home_screen.dart';
 import 'map_screen.dart';
 import 'profile_screen.dart';
@@ -44,9 +45,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+    AppSnackBar.show(context, message);
   }
 
   void _handleNavigation(int index) {

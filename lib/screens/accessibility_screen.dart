@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
+import '../widgets/app_snackbar.dart';
 import 'home_screen.dart';
 
 class AccessibilityScreen extends StatelessWidget {
@@ -18,9 +19,7 @@ class AccessibilityScreen extends StatelessWidget {
   }
 
   void _showMessage(BuildContext context, String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+    AppSnackBar.show(context, message);
   }
 
   @override

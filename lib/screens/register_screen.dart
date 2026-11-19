@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
+import '../widgets/app_snackbar.dart';
 import '../widgets/app_button.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -112,9 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+    AppSnackBar.show(context, message);
   }
 
   InputDecoration _inputDecoration({

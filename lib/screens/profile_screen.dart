@@ -4,6 +4,7 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 import '../data/mock_user.dart';
 import '../widgets/app_bottom_navigation.dart';
+import '../widgets/app_snackbar.dart';
 import 'alerts_screen.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
@@ -21,9 +22,7 @@ class ProfileScreen extends StatelessWidget {
   final ValueChanged<int>? onNavigationRequested;
 
   void _showMessage(BuildContext context, String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+    AppSnackBar.show(context, message);
   }
 
   void _openOption(BuildContext context, String option) {

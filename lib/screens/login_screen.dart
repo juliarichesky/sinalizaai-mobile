@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
+import '../widgets/app_snackbar.dart';
 import 'main_navigation_screen.dart';
 import 'register_screen.dart';
 import '../widgets/app_button.dart';
@@ -46,25 +47,14 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    _showMessage('Login realizado com sucesso!');
+    AppSnackBar.show(
+      context,
+      'Login realizado com sucesso!',
+      type: AppSnackBarType.success,
+    );
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(builder: (_) => const MainNavigationScreen()),
     );
-  }
-
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: AppColors.hotRose,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      );
   }
 
   void _openRegister() {
@@ -216,8 +206,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () =>
-                                _showMessage('Recuperação de senha em breve.'),
+                            onPressed: () => AppSnackBar.show(
+                              context,
+                              'Recuperação de senha em breve.',
+                            ),
                             style: TextButton.styleFrom(
                               foregroundColor: AppColors.hotRose,
                               padding: const EdgeInsets.symmetric(vertical: 4),
