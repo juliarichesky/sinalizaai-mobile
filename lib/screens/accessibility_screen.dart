@@ -4,6 +4,9 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 import '../widgets/app_snackbar.dart';
 import 'home_screen.dart';
+import 'accessible_sidewalks_screen.dart';
+import 'audible_traffic_lights_screen.dart';
+import 'ramp_routes_screen.dart';
 
 class AccessibilityScreen extends StatelessWidget {
   const AccessibilityScreen({super.key});
@@ -68,27 +71,30 @@ class AccessibilityScreen extends StatelessWidget {
                     _AccessibilityResource(
                       icon: Icons.accessibility_new,
                       label: 'Rotas com rampas',
-                      onTap: () => _showMessage(
-                        context,
-                        'Rotas com rampas estarão disponíveis em breve.',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const RampRoutesScreen(),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 7),
                     _AccessibilityResource(
                       icon: Icons.volume_up_outlined,
                       label: 'Semáforos sonoros',
-                      onTap: () => _showMessage(
-                        context,
-                        'Semáforos sonoros estarão disponíveis em breve.',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const AudibleTrafficLightsScreen(),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 7),
                     _AccessibilityResource(
                       icon: Icons.wheelchair_pickup,
                       label: 'Calçadas acessíveis',
-                      onTap: () => _showMessage(
-                        context,
-                        'Calçadas acessíveis estarão disponíveis em breve.',
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const AccessibleSidewalksScreen(),
+                        ),
                       ),
                     ),
                   ],
