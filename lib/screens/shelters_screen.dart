@@ -3,14 +3,24 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 import '../data/mock_shelters.dart';
+import '../widgets/app_bottom_navigation.dart';
+import 'alerts_screen.dart';
 import 'home_screen.dart';
 import 'map_screen.dart';
+import 'profile_screen.dart';
 import 'shelter_detail_screen.dart';
 
 enum _ShelterFilter { nearby, favorites }
 
 class SheltersScreen extends StatefulWidget {
-  const SheltersScreen({super.key});
+  const SheltersScreen({
+    super.key,
+    this.showBottomNavigation = true,
+    this.onNavigationRequested,
+  });
+
+  final bool showBottomNavigation;
+  final ValueChanged<int>? onNavigationRequested;
 
   @override
   State<SheltersScreen> createState() => _SheltersScreenState();
@@ -56,9 +66,38 @@ class _SheltersScreenState extends State<SheltersScreen> {
   }
 
   void _openMap() {
+    if (widget.onNavigationRequested != null) {
+      widget.onNavigationRequested!(1);
+      return;
+    }
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(builder: (_) => const MapScreen()),
     );
+  }
+
+  void _handleNavigation(int index) {
+    if (widget.onNavigationRequested != null) {
+      widget.onNavigationRequested!(index);
+      return;
+    }
+    switch (index) {
+      case 0:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
+        );
+      case 1:
+        _openMap();
+      case 2:
+        break;
+      case 3:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const AlertsScreen()),
+        );
+      case 4:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const ProfileScreen()),
+        );
+    }
   }
 
   @override
@@ -67,10 +106,19 @@ class _SheltersScreenState extends State<SheltersScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.softBackground,
+      bottomNavigationBar: widget.showBottomNavigation
+          ? AppBottomNavigation(
+              selectedIndex: 2,
+              onItemSelected: _handleNavigation,
+            )
+          : null,
       body: SafeArea(
         child: Column(
           children: [
-            _SheltersHeader(onBack: _goBack),
+            _SheltersHeader(
+              onBack: _goBack,
+              showBackButton: widget.showBottomNavigation,
+            ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
@@ -142,9 +190,10 @@ class _SheltersScreenState extends State<SheltersScreen> {
 }
 
 class _SheltersHeader extends StatelessWidget {
-  const _SheltersHeader({required this.onBack});
+  const _SheltersHeader({required this.onBack, required this.showBackButton});
 
   final VoidCallback onBack;
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -153,15 +202,16 @@ class _SheltersHeader extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: onBack,
-              tooltip: 'Voltar',
-              icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-              color: AppColors.darkAmethyst,
+          if (showBackButton)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                onPressed: onBack,
+                tooltip: 'Voltar',
+                icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                color: AppColors.darkAmethyst,
+              ),
             ),
-          ),
           Text('Abrigos', style: AppTypography.subtitle.copyWith(fontSize: 17)),
         ],
       ),

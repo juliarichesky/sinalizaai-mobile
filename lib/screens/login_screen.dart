@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
-import 'home_screen.dart';
+import 'main_navigation_screen.dart';
 import 'register_screen.dart';
 import '../widgets/app_button.dart';
 
@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     _showMessage('Login realizado com sucesso!');
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
+      MaterialPageRoute<void>(builder: (_) => const MainNavigationScreen()),
     );
   }
 

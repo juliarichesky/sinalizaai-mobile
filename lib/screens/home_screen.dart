@@ -11,7 +11,14 @@ import 'profile_screen.dart';
 import 'shelters_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+    this.showBottomNavigation = true,
+    this.onNavigationRequested,
+  });
+
+  final bool showBottomNavigation;
+  final ValueChanged<int>? onNavigationRequested;
 
   void _showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
@@ -49,14 +56,24 @@ class HomeScreen extends StatelessWidget {
     _showMessage(context, 'Esta funcionalidade estará disponível em breve.');
   }
 
+  void _navigate(BuildContext context, int index) {
+    if (onNavigationRequested != null) {
+      onNavigationRequested!(index);
+      return;
+    }
+    _handleNavigation(context, index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.darkAmethyst,
-      bottomNavigationBar: AppBottomNavigation(
-        selectedIndex: 0,
-        onItemSelected: (index) => _handleNavigation(context, index),
-      ),
+      bottomNavigationBar: showBottomNavigation
+          ? AppBottomNavigation(
+              selectedIndex: 0,
+              onItemSelected: (index) => _navigate(context, index),
+            )
+          : null,
       body: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -100,11 +117,7 @@ class HomeScreen extends StatelessWidget {
                             icon: Icons.location_on_outlined,
                             title: 'Mapa',
                             description: 'Visualizar região',
-                            onTap: () => Navigator.of(context).pushReplacement(
-                              MaterialPageRoute<void>(
-                                builder: (_) => const MapScreen(),
-                              ),
-                            ),
+                            onTap: () => _navigate(context, 1),
                           ),
                           _FeatureCard(
                             icon: Icons.accessibility_new,
@@ -129,11 +142,7 @@ class HomeScreen extends StatelessWidget {
                             icon: Icons.home_work_outlined,
                             title: 'Abrigos',
                             description: 'Locais seguros',
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder: (_) => const SheltersScreen(),
-                              ),
-                            ),
+                            onTap: () => _navigate(context, 2),
                           ),
                         ],
                       ),

@@ -3,11 +3,22 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 import '../data/mock_user.dart';
+import '../widgets/app_bottom_navigation.dart';
+import 'alerts_screen.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
+import 'map_screen.dart';
+import 'shelters_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({
+    super.key,
+    this.showBottomNavigation = true,
+    this.onNavigationRequested,
+  });
+
+  final bool showBottomNavigation;
+  final ValueChanged<int>? onNavigationRequested;
 
   void _showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
@@ -27,6 +38,33 @@ class ProfileScreen extends StatelessWidget {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
     );
+  }
+
+  void _handleNavigation(BuildContext context, int index) {
+    if (onNavigationRequested != null) {
+      onNavigationRequested!(index);
+      return;
+    }
+    switch (index) {
+      case 0:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
+        );
+      case 1:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const MapScreen()),
+        );
+      case 2:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const SheltersScreen()),
+        );
+      case 3:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const AlertsScreen()),
+        );
+      case 4:
+        break;
+    }
   }
 
   Future<void> _confirmSignOut(BuildContext context) async {
@@ -66,6 +104,12 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.softBackground,
+      bottomNavigationBar: showBottomNavigation
+          ? AppBottomNavigation(
+              selectedIndex: 4,
+              onItemSelected: (index) => _handleNavigation(context, index),
+            )
+          : null,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -77,7 +121,10 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    _ProfileHeader(onBack: () => _goBack(context)),
+                    _ProfileHeader(
+                      onBack: () => _goBack(context),
+                      showBackButton: showBottomNavigation,
+                    ),
                     const SizedBox(height: 20),
                     _UserSummary(
                       user: mockUser,
@@ -117,9 +164,10 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class _ProfileHeader extends StatelessWidget {
-  const _ProfileHeader({required this.onBack});
+  const _ProfileHeader({required this.onBack, required this.showBackButton});
 
   final VoidCallback onBack;
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -128,15 +176,16 @@ class _ProfileHeader extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: onBack,
-              tooltip: 'Voltar',
-              icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-              color: AppColors.darkAmethyst,
+          if (showBackButton)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                onPressed: onBack,
+                tooltip: 'Voltar',
+                icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+                color: AppColors.darkAmethyst,
+              ),
             ),
-          ),
           Text(
             'Meu perfil',
             style: AppTypography.subtitle.copyWith(fontSize: 16),

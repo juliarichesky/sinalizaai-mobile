@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:meu_app/main.dart';
 import 'package:meu_app/screens/alerts_screen.dart';
 import 'package:meu_app/screens/home_screen.dart';
+import 'package:meu_app/screens/main_navigation_screen.dart';
 import 'package:meu_app/screens/map_screen.dart';
 
 void main() {
@@ -141,5 +142,57 @@ void main() {
 
     expect(find.text('Trânsito intenso'), findsOneWidget);
     expect(find.text('Manutenção'), findsOneWidget);
+  });
+
+  testWidgets('mantém as cinco telas principais no host de navegação', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: MainNavigationScreen()));
+
+    expect(find.text('Início'), findsOneWidget);
+    expect(find.text('Mapa'), findsNWidgets(2));
+    expect(find.text('Abrigos'), findsNWidgets(2));
+    expect(find.text('Alertas'), findsNWidgets(2));
+    expect(find.text('Perfil'), findsOneWidget);
+
+    await tester.tap(find.text('Mapa').last);
+    await tester.pump();
+    expect(find.text('Buscar endereço'), findsOneWidget);
+
+    await tester.tap(find.text('Abrigos').last);
+    await tester.pump();
+    expect(find.text('Próximos'), findsOneWidget);
+
+    await tester.tap(find.text('Alertas').last);
+    await tester.pump();
+    expect(find.text('Todos'), findsOneWidget);
+
+    await tester.tap(find.text('Perfil'));
+    await tester.pump();
+    expect(find.text('Meu perfil'), findsOneWidget);
+
+    await tester.tap(find.text('Início'));
+    await tester.pump();
+    expect(find.text('Olá, Julia! 👋'), findsOneWidget);
+  });
+
+  testWidgets('abre detalhes a partir do marcador e preserva o mapa', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: MainNavigationScreen()));
+
+    await tester.tap(find.text('Mapa').last);
+    await tester.pump();
+    await tester.tap(find.byIcon(Icons.location_on).first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Semáforo'), findsOneWidget);
+    expect(find.text('Av. Paulista, 1573'), findsOneWidget);
+    expect(find.text('Status atual'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Voltar'));
+    await tester.pumpAndSettle();
+    expect(find.text('Buscar endereço'), findsOneWidget);
+    expect(find.text('Semáforos'), findsOneWidget);
   });
 }

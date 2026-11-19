@@ -3,11 +3,23 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 import '../data/mock_alerts.dart';
+import '../widgets/app_bottom_navigation.dart';
+import 'home_screen.dart';
+import 'map_screen.dart';
+import 'profile_screen.dart';
+import 'shelters_screen.dart';
 
 enum _AlertFilter { all, floods, traffic }
 
 class AlertsScreen extends StatefulWidget {
-  const AlertsScreen({super.key});
+  const AlertsScreen({
+    super.key,
+    this.showBottomNavigation = true,
+    this.onNavigationRequested,
+  });
+
+  final bool showBottomNavigation;
+  final ValueChanged<int>? onNavigationRequested;
 
   @override
   State<AlertsScreen> createState() => _AlertsScreenState();
@@ -37,6 +49,33 @@ class _AlertsScreenState extends State<AlertsScreen> {
       ..showSnackBar(SnackBar(content: Text(message)));
   }
 
+  void _handleNavigation(int index) {
+    if (widget.onNavigationRequested != null) {
+      widget.onNavigationRequested!(index);
+      return;
+    }
+    switch (index) {
+      case 0:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
+        );
+      case 1:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const MapScreen()),
+        );
+      case 2:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const SheltersScreen()),
+        );
+      case 3:
+        break;
+      case 4:
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const ProfileScreen()),
+        );
+    }
+  }
+
   Color _alertColor(MockAlert alert) {
     switch (alert.category) {
       case AlertCategory.flood:
@@ -52,6 +91,12 @@ class _AlertsScreenState extends State<AlertsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.softBackground,
+      bottomNavigationBar: widget.showBottomNavigation
+          ? AppBottomNavigation(
+              selectedIndex: 3,
+              onItemSelected: _handleNavigation,
+            )
+          : null,
       body: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -67,7 +112,10 @@ class _AlertsScreenState extends State<AlertsScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              _AlertsHeader(onBack: () => Navigator.of(context).pop()),
+              _AlertsHeader(
+                onBack: () => Navigator.of(context).pop(),
+                showBackButton: widget.showBottomNavigation,
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
                 child: SingleChildScrollView(
@@ -137,9 +185,13 @@ class _AlertsScreenState extends State<AlertsScreen> {
 }
 
 class _AlertsHeader extends StatelessWidget {
-  const _AlertsHeader({required this.onBack});
+  const _AlertsHeader({
+    required this.onBack,
+    required this.showBackButton,
+  });
 
   final VoidCallback onBack;
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -148,14 +200,18 @@ class _AlertsHeader extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: onBack,
-              tooltip: 'Voltar',
-              icon: const Icon(Icons.arrow_back, color: AppColors.darkAmethyst),
+          if (showBackButton)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: IconButton(
+                onPressed: onBack,
+                tooltip: 'Voltar',
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: AppColors.darkAmethyst,
+                ),
+              ),
             ),
-          ),
           Text(
             'Alertas',
             style: AppTypography.subtitle.copyWith(

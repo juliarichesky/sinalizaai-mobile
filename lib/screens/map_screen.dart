@@ -14,7 +14,14 @@ import 'traffic_light_detail_screen.dart';
 enum _MapMode { trafficLights, shelters }
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+  const MapScreen({
+    super.key,
+    this.showBottomNavigation = true,
+    this.onNavigationRequested,
+  });
+
+  final bool showBottomNavigation;
+  final ValueChanged<int>? onNavigationRequested;
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -122,14 +129,21 @@ class _MapScreenState extends State<MapScreen> {
     _showMessage('Esta funcionalidade estará disponível em breve.');
   }
 
+  void _navigate(int index) {
+    if (widget.onNavigationRequested != null) {
+      widget.onNavigationRequested!(index);
+      return;
+    }
+    _handleNavigation(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.softBackground,
-      bottomNavigationBar: AppBottomNavigation(
-        selectedIndex: 1,
-        onItemSelected: _handleNavigation,
-      ),
+      bottomNavigationBar: widget.showBottomNavigation
+          ? AppBottomNavigation(selectedIndex: 1, onItemSelected: _navigate)
+          : null,
       body: SafeArea(
         child: Column(
           children: [
