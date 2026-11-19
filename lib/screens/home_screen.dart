@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkAmethyst,
+      backgroundColor: Colors.white,
       bottomNavigationBar: showBottomNavigation
           ? AppBottomNavigation(
               selectedIndex: 0,
@@ -79,9 +79,9 @@ class HomeScreen extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppColors.darkAmethyst,
-              AppColors.nightBordeaux,
-              AppColors.hotRose.withValues(alpha: 0.34),
+              Colors.white,
+              Colors.white,
+              AppColors.lavenderVeil.withValues(alpha: 0.34),
             ],
             stops: const [0.0, 0.62, 1.0],
           ),
@@ -149,8 +149,8 @@ class HomeScreen extends StatelessWidget {
                       Text(
                         'Alertas da sua região',
                         style: AppTypography.subtitle.copyWith(
-                          color: Colors.white,
-                          fontSize: 16,
+                          color: AppColors.darkAmethyst,
+                          fontSize: 20,
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -191,15 +191,15 @@ class _Header extends StatelessWidget {
                 TextSpan(
                   text: 'Olá, ',
                   style: AppTypography.heading.copyWith(
-                    color: Colors.white,
-                    fontSize: 22,
+                    color: AppColors.darkAmethyst,
+                    fontSize: 24,
                   ),
                   children: [
                     TextSpan(
                       text: '$firstName! 👋',
                       style: AppTypography.heading.copyWith(
-                        color: Colors.white,
-                        fontSize: 22,
+                        color: AppColors.darkAmethyst,
+                        fontSize: 24,
                       ),
                     ),
                   ],
@@ -209,8 +209,8 @@ class _Header extends StatelessWidget {
               Text(
                 'Bem-vinda ao Sinaliza.Ai',
                 style: AppTypography.caption.copyWith(
-                  color: Colors.white.withValues(alpha: 0.85),
-                  fontSize: 13,
+                  color: AppColors.darkAmethyst.withValues(alpha: 0.78),
+                  fontSize: 14,
                 ),
               ),
             ],
@@ -221,8 +221,8 @@ class _Header extends StatelessWidget {
           tooltip: 'Notificações',
           icon: const Icon(
             Icons.notifications_none,
-            color: Colors.white,
-            size: 22,
+            color: AppColors.darkAmethyst,
+            size: 24,
           ),
         ),
       ],
@@ -249,8 +249,10 @@ class _FeatureCard extends StatelessWidget {
       button: true,
       label: '$title. $description',
       child: Material(
-        color: AppColors.softBackground,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(18),
+        elevation: 1,
+        shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.08),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(18),
@@ -267,7 +269,7 @@ class _FeatureCard extends StatelessWidget {
                     color: AppColors.hotRose.withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(icon, color: AppColors.hotRose, size: 28),
+                  child: Icon(icon, color: AppColors.hotRose, size: 32),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -277,7 +279,7 @@ class _FeatureCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTypography.subtitle.copyWith(
                     color: AppColors.darkAmethyst,
-                    fontSize: 14,
+                    fontSize: 16,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -288,7 +290,7 @@ class _FeatureCard extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTypography.caption.copyWith(
                     color: AppColors.nightBordeaux,
-                    fontSize: 10,
+                    fontSize: 14,
                   ),
                 ),
               ],
@@ -342,7 +344,7 @@ class _RegionalAlert extends StatelessWidget {
                         'Atenção: Risco de enchente',
                         style: AppTypography.subtitle.copyWith(
                           color: AppColors.darkAmethyst,
-                          fontSize: 12,
+                          fontSize: 16,
                         ),
                       ),
                       const SizedBox(height: 3),
@@ -350,7 +352,7 @@ class _RegionalAlert extends StatelessWidget {
                         'Nível moderado no Rio Tietê.',
                         style: AppTypography.caption.copyWith(
                           color: AppColors.nightBordeaux,
-                          fontSize: 11,
+                          fontSize: 14,
                         ),
                       ),
                     ],

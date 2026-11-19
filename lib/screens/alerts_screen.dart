@@ -97,17 +97,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
             )
           : null,
       body: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.softBackground,
-              Colors.white.withValues(alpha: 0.72),
-              AppColors.softBackground.withValues(alpha: 0.8),
-            ],
-          ),
-        ),
+        decoration: BoxDecoration(color: Colors.white),
         child: SafeArea(
           child: Column(
             children: [
@@ -288,7 +278,7 @@ class _AlertCard extends StatelessWidget {
       button: true,
       label: '${alert.title}. ${alert.description}. ${alert.time}',
       child: Material(
-        color: Colors.white.withValues(alpha: 0.7),
+        color: Colors.white,
         elevation: 1,
         shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(14),
@@ -318,7 +308,7 @@ class _AlertCard extends StatelessWidget {
                         alert.title,
                         style: AppTypography.subtitle.copyWith(
                           color: AppColors.darkAmethyst,
-                          fontSize: 14,
+                          fontSize: 16,
                         ),
                       ),
                       const SizedBox(height: 3),
@@ -326,7 +316,7 @@ class _AlertCard extends StatelessWidget {
                         alert.description,
                         style: AppTypography.caption.copyWith(
                           color: AppColors.nightBordeaux,
-                          fontSize: 11,
+                          fontSize: 14,
                         ),
                       ),
                       if (alert.location != null) ...[
@@ -335,7 +325,7 @@ class _AlertCard extends StatelessWidget {
                           alert.location!,
                           style: AppTypography.caption.copyWith(
                             color: AppColors.nightBordeaux,
-                            fontSize: 11,
+                            fontSize: 14,
                           ),
                         ),
                       ],
@@ -346,7 +336,7 @@ class _AlertCard extends StatelessWidget {
                           alert.time,
                           style: AppTypography.caption.copyWith(
                             color: AppColors.nightBordeaux,
-                            fontSize: 10,
+                            fontSize: 13,
                           ),
                         ),
                       ),

@@ -72,7 +72,7 @@ class _ShelterDetailScreenState extends State<ShelterDetailScreen> {
                       textAlign: TextAlign.center,
                       style: AppTypography.caption.copyWith(
                         color: AppColors.nightBordeaux.withValues(alpha: 0.75),
-                        fontSize: 10,
+                        fontSize: 13,
                       ),
                     ),
                   ],
@@ -190,7 +190,7 @@ class _IdentitySection extends StatelessWidget {
                     child: Text(
                       shelter.formattedDistance,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTypography.caption.copyWith(fontSize: 11),
+                      style: AppTypography.caption.copyWith(fontSize: 14),
                     ),
                   ),
                 ],
@@ -200,7 +200,7 @@ class _IdentitySection extends StatelessWidget {
                 shelter.address ?? 'Endereço não informado',
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: AppTypography.caption.copyWith(fontSize: 11),
+                style: AppTypography.caption.copyWith(fontSize: 14),
               ),
             ],
           ),
@@ -273,13 +273,13 @@ class _Characteristic extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: color, size: 14),
+          Icon(icon, color: color, size: 20),
           const SizedBox(width: 5),
           Text(
             label,
             style: AppTypography.caption.copyWith(
               color: color,
-              fontSize: 10,
+              fontSize: 13,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -301,7 +301,7 @@ class _StructureSection extends StatelessWidget {
       child: features.isEmpty
           ? Text(
               'Nenhuma estrutura informada.',
-              style: AppTypography.caption.copyWith(fontSize: 11),
+              style: AppTypography.caption.copyWith(fontSize: 14),
             )
           : Column(
               children: features
@@ -320,7 +320,7 @@ class _StructureSection extends StatelessWidget {
                             child: Text(
                               feature,
                               style: AppTypography.caption.copyWith(
-                                fontSize: 11,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -394,20 +394,20 @@ class _InformationRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: AppColors.darkAmethyst, size: 16),
+          Icon(icon, color: AppColors.darkAmethyst, size: 24),
           const SizedBox(width: 8),
           Expanded(
             child: Text.rich(
               TextSpan(
                 text: '$label\n',
                 style: AppTypography.caption.copyWith(
-                  fontSize: 10,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                 ),
                 children: [
                   TextSpan(
                     text: value,
-                    style: AppTypography.caption.copyWith(fontSize: 10),
+                    style: AppTypography.caption.copyWith(fontSize: 13),
                   ),
                 ],
               ),
@@ -436,7 +436,7 @@ class _SectionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: AppTypography.subtitle.copyWith(fontSize: 12)),
+          Text(title, style: AppTypography.subtitle.copyWith(fontSize: 20)),
           const SizedBox(height: 8),
           child,
         ],

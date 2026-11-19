@@ -246,14 +246,14 @@ class _UserSummary extends StatelessWidget {
           user.fullName,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTypography.subtitle.copyWith(fontSize: 14),
+          style: AppTypography.subtitle.copyWith(fontSize: 18),
         ),
         const SizedBox(height: 1),
         Text(
           user.email,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTypography.caption.copyWith(fontSize: 10),
+          style: AppTypography.caption.copyWith(fontSize: 14),
         ),
       ],
     );
@@ -277,7 +277,9 @@ class _ProfileOption extends StatelessWidget {
       button: true,
       label: label,
       child: Material(
-        color: Colors.white.withValues(alpha: 0.72),
+        color: Colors.white,
+        elevation: 1,
+        shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(10),
         child: InkWell(
           onTap: onTap,
@@ -286,20 +288,20 @@ class _ProfileOption extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
             child: Row(
               children: [
-                Icon(icon, color: AppColors.darkAmethyst, size: 17),
+                Icon(icon, color: AppColors.darkAmethyst, size: 24),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTypography.body.copyWith(fontSize: 12),
+                    style: AppTypography.body.copyWith(fontSize: 16),
                   ),
                 ),
                 const Icon(
                   Icons.chevron_right,
                   color: AppColors.darkAmethyst,
-                  size: 18,
+                  size: 24,
                 ),
               ],
             ),
@@ -327,13 +329,14 @@ class _SignOutButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 10),
+          minimumSize: const Size.fromHeight(54),
+          padding: const EdgeInsets.symmetric(vertical: 14),
         ),
         child: Text(
           'Sair da conta',
           style: AppTypography.body.copyWith(
             color: AppColors.hotRose,
-            fontSize: 12,
+            fontSize: 16,
             fontWeight: FontWeight.w700,
           ),
         ),

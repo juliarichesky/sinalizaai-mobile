@@ -257,7 +257,7 @@ class _ShelterFilterChip extends StatelessWidget {
               label,
               style: AppTypography.caption.copyWith(
                 color: isSelected ? Colors.white : AppColors.darkAmethyst,
-                fontSize: 10,
+                fontSize: 13,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -290,7 +290,9 @@ class _ShelterCard extends StatelessWidget {
           '${shelter.isCovered ? 'Coberto' : 'Sem cobertura'}, '
           '${shelter.isAccessible == true ? 'Acessível' : 'Não acessível'}',
       child: Material(
-        color: Colors.white.withValues(alpha: 0.72),
+        color: Colors.white,
+        elevation: 1,
+        shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           onTap: onTap,
@@ -321,13 +323,13 @@ class _ShelterCard extends StatelessWidget {
                         shelter.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTypography.subtitle.copyWith(fontSize: 12),
+                        style: AppTypography.subtitle.copyWith(fontSize: 16),
                       ),
                       const SizedBox(height: 3),
                       Text(
                         '${shelter.formattedDistance} • '
                         '${shelter.isCovered ? 'Coberto' : 'Sem cobertura'}',
-                        style: AppTypography.caption.copyWith(fontSize: 10),
+                        style: AppTypography.caption.copyWith(fontSize: 13),
                       ),
                       const SizedBox(height: 2),
                       Row(
@@ -335,14 +337,14 @@ class _ShelterCard extends StatelessWidget {
                           const Icon(
                             Icons.accessibility_new,
                             color: AppColors.darkAmethyst,
-                            size: 13,
+                            size: 20,
                           ),
                           const SizedBox(width: 3),
                           Text(
                             shelter.isAccessible == true
                                 ? 'Acessível'
                                 : 'Não acessível',
-                            style: AppTypography.caption.copyWith(fontSize: 10),
+                            style: AppTypography.caption.copyWith(fontSize: 13),
                           ),
                         ],
                       ),
@@ -359,13 +361,13 @@ class _ShelterCard extends StatelessWidget {
                     color: isFavorite
                         ? AppColors.hotRose
                         : AppColors.darkAmethyst.withValues(alpha: 0.55),
-                    size: 17,
+                    size: 24,
                   ),
                 ),
                 const Icon(
                   Icons.chevron_right,
                   color: AppColors.darkAmethyst,
-                  size: 18,
+                  size: 24,
                 ),
               ],
             ),
@@ -405,7 +407,7 @@ class _MapButton extends StatelessWidget {
       width: double.infinity,
       child: FilledButton.icon(
         onPressed: onTap,
-        icon: const Icon(Icons.location_on_outlined, size: 17),
+        icon: const Icon(Icons.location_on_outlined, size: 24),
         label: const Text('Ver no mapa'),
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.hotRose,
@@ -413,10 +415,11 @@ class _MapButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 11),
+          minimumSize: const Size.fromHeight(54),
+          padding: const EdgeInsets.symmetric(vertical: 14),
           textStyle: AppTypography.body.copyWith(
             color: Colors.white,
-            fontSize: 12,
+            fontSize: 16,
             fontWeight: FontWeight.w700,
           ),
         ),

@@ -5,7 +5,7 @@ import 'app_colors.dart';
 
 abstract final class AppTypography {
   static final TextStyle heading = GoogleFonts.dmSans(
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: FontWeight.w700,
     color: AppColors.darkAmethyst,
   );
@@ -23,7 +23,7 @@ abstract final class AppTypography {
   );
 
   static final TextStyle caption = GoogleFonts.dmSans(
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: FontWeight.w400,
     color: AppColors.nightBordeaux,
   );

@@ -182,11 +182,11 @@ class _MapScreenState extends State<MapScreen> {
                             left:
                                 _trafficPoints[index].position.dx *
                                     constraints.maxWidth -
-                                24,
+                                28,
                             top:
                                 _trafficPoints[index].position.dy *
                                     constraints.maxHeight -
-                                28,
+                                30,
                             child: _MapMarker(
                               point: _trafficPoints[index],
                               isSelected: index == _selectedTrafficIndex,
@@ -203,11 +203,11 @@ class _MapScreenState extends State<MapScreen> {
                             left:
                                 _mappedShelters[index].mapPosition!.dx *
                                     constraints.maxWidth -
-                                24,
+                                28,
                             top:
                                 _mappedShelters[index].mapPosition!.dy *
                                     constraints.maxHeight -
-                                28,
+                                30,
                             child: _ShelterMarker(
                               shelter: _mappedShelters[index],
                               isSelected: index == _selectedShelterIndex,
@@ -455,7 +455,7 @@ class _MapModeChip extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, color: color, size: 16),
+                Icon(icon, color: color, size: 22),
                 const SizedBox(width: 5),
                 Flexible(
                   child: Text(
@@ -463,7 +463,7 @@ class _MapModeChip extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppTypography.caption.copyWith(
                       color: color,
-                      fontSize: 10,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -497,18 +497,18 @@ class _ShelterMarker extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: SizedBox(
-          height: 56,
-          width: 48,
+          height: 60,
+          width: 56,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
               Icon(
                 Icons.location_on,
                 color: AppColors.hotRose,
-                size: isSelected ? 52 : 48,
+                size: isSelected ? 54 : 50,
               ),
               Positioned(
-                top: 8,
+                top: 9,
                 child: Icon(
                   Icons.home_work_outlined,
                   color: Colors.white,
@@ -559,7 +559,7 @@ class _ShelterInfoCard extends StatelessWidget {
                 shelter.name,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: AppTypography.subtitle.copyWith(fontSize: 12),
+                style: AppTypography.subtitle.copyWith(fontSize: 16),
               ),
             ),
             TextButton(onPressed: onDetails, child: const Text('Ver detalhes')),
@@ -593,14 +593,14 @@ class _MapMarker extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: SizedBox(
-          height: 56,
-          width: 48,
+          height: 60,
+          width: 56,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
-              Icon(Icons.location_on, color: color, size: isSelected ? 52 : 48),
+              Icon(Icons.location_on, color: color, size: isSelected ? 54 : 50),
               Positioned(
-                top: 8,
+                top: 9,
                 child: Icon(icon, color: Colors.white, size: 19),
               ),
             ],

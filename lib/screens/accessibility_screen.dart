@@ -44,13 +44,13 @@ class AccessibilityScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     Text(
                       'Rotas mais inclusivas',
-                      style: AppTypography.subtitle.copyWith(fontSize: 17),
+                      style: AppTypography.subtitle.copyWith(fontSize: 20),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       'Encontre trajetos seguros com rampas, pisos táteis, '
                       'calçadas adequadas e semáforos sonoros.',
-                      style: AppTypography.caption.copyWith(fontSize: 12),
+                      style: AppTypography.caption.copyWith(fontSize: 14),
                     ),
                     const SizedBox(height: 18),
                     _PrimaryButton(
@@ -62,7 +62,7 @@ class AccessibilityScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     Text(
                       'Recursos disponíveis',
-                      style: AppTypography.subtitle.copyWith(fontSize: 14),
+                      style: AppTypography.subtitle.copyWith(fontSize: 20),
                     ),
                     const SizedBox(height: 8),
                     _AccessibilityResource(
@@ -224,13 +224,13 @@ class _PrimaryButton extends StatelessWidget {
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.hotRose,
           foregroundColor: Colors.white,
-          minimumSize: const Size.fromHeight(44),
+          minimumSize: const Size.fromHeight(54),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
           textStyle: AppTypography.body.copyWith(
             color: Colors.white,
-            fontSize: 12,
+            fontSize: 16,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -279,7 +279,7 @@ class _AccessibilityResource extends StatelessWidget {
                 Expanded(
                   child: Text(
                     label,
-                    style: AppTypography.body.copyWith(fontSize: 12),
+                    style: AppTypography.body.copyWith(fontSize: 16),
                   ),
                 ),
                 const Icon(

@@ -133,7 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       suffixIcon: suffixIcon,
       filled: true,
       fillColor: Colors.white.withValues(alpha: 0.45),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: border,
       enabledBorder: border,
       focusedBorder: border.copyWith(

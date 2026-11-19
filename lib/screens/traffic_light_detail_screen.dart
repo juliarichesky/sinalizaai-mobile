@@ -46,7 +46,7 @@ class TrafficLightDetailScreen extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: AppTypography.caption.copyWith(
                         color: AppColors.nightBordeaux.withValues(alpha: 0.75),
-                        fontSize: 10,
+                        fontSize: 13,
                       ),
                     ),
                   ],
@@ -149,7 +149,7 @@ class _TrafficLightIdentity extends StatelessWidget {
             point.address ?? point.name,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: AppTypography.subtitle.copyWith(fontSize: 15),
+            style: AppTypography.subtitle.copyWith(fontSize: 18),
           ),
         ),
       ],
@@ -236,7 +236,7 @@ class _MetricCard extends StatelessWidget {
               title,
               style: AppTypography.caption.copyWith(
                 color: AppColors.darkAmethyst,
-                fontSize: 11,
+                fontSize: 14,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -266,7 +266,7 @@ class _MetricCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: AppTypography.caption.copyWith(
                       color: color,
-                      fontSize: 11,
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -309,7 +309,7 @@ class _CrossingInformation extends StatelessWidget {
         children: [
           Text(
             'Informações do cruzamento',
-            style: AppTypography.subtitle.copyWith(fontSize: 12),
+            style: AppTypography.subtitle.copyWith(fontSize: 20),
           ),
           const SizedBox(height: 8),
           ...rows,
@@ -337,13 +337,13 @@ class _InformationRow extends StatelessWidget {
               TextSpan(
                 text: '$label\n',
                 style: AppTypography.caption.copyWith(
-                  fontSize: 10,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                 ),
                 children: [
                   TextSpan(
                     text: value,
-                    style: AppTypography.caption.copyWith(fontSize: 10),
+                    style: AppTypography.caption.copyWith(fontSize: 13),
                   ),
                 ],
               ),
