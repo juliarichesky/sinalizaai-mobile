@@ -5,8 +5,9 @@ import '../core/theme/app_typography.dart';
 import '../data/mock_shelters.dart';
 import 'home_screen.dart';
 import 'map_screen.dart';
+import 'shelter_detail_screen.dart';
 
-enum _ShelterFilter { nearby, favorites, rated }
+enum _ShelterFilter { nearby, favorites }
 
 class SheltersScreen extends StatefulWidget {
   const SheltersScreen({super.key});
@@ -33,8 +34,6 @@ class _SheltersScreenState extends State<SheltersScreen> {
         return shelters
             .where((shelter) => _favoriteIds.contains(shelter.id))
             .toList();
-      case _ShelterFilter.rated:
-        return shelters.where((shelter) => shelter.hasRating).toList();
     }
   }
 
@@ -91,19 +90,12 @@ class _SheltersScreenState extends State<SheltersScreen> {
                       () => _selectedFilter = _ShelterFilter.favorites,
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  _ShelterFilterChip(
-                    label: 'Avaliados',
-                    isSelected: _selectedFilter == _ShelterFilter.rated,
-                    onTap: () =>
-                        setState(() => _selectedFilter = _ShelterFilter.rated),
-                  ),
                 ],
               ),
             ),
             Expanded(
               child: shelters.isEmpty
-                  ? _EmptyShelters(filter: _selectedFilter)
+                  ? const _EmptyShelters()
                   : ListView.separated(
                       padding: const EdgeInsets.fromLTRB(18, 0, 18, 16),
                       itemCount: shelters.length,
@@ -114,6 +106,26 @@ class _SheltersScreenState extends State<SheltersScreen> {
                           shelter: shelter,
                           isFavorite: _favoriteIds.contains(shelter.id),
                           onFavorite: () => _toggleFavorite(shelter),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => ShelterDetailScreen(
+                                shelter: shelter,
+                                isFavorite: _favoriteIds.contains(shelter.id),
+                                onFavoriteChanged: (isFavorite) {
+                                  if (!mounted) {
+                                    return;
+                                  }
+                                  setState(() {
+                                    if (isFavorite) {
+                                      _favoriteIds.add(shelter.id);
+                                    } else {
+                                      _favoriteIds.remove(shelter.id);
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
                         );
                       },
                     ),
@@ -211,11 +223,13 @@ class _ShelterCard extends StatelessWidget {
     required this.shelter,
     required this.isFavorite,
     required this.onFavorite,
+    required this.onTap,
   });
 
   final Shelter shelter;
   final bool isFavorite;
   final VoidCallback onFavorite;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -224,81 +238,87 @@ class _ShelterCard extends StatelessWidget {
       label:
           '${shelter.name}, ${shelter.formattedDistance}, '
           '${shelter.isCovered ? 'Coberto' : 'Sem cobertura'}, '
-          '${shelter.isAccessible ? 'Acessível' : 'Não acessível'}',
+          '${shelter.isAccessible == true ? 'Acessível' : 'Não acessível'}',
       child: Material(
         color: Colors.white.withValues(alpha: 0.72),
         borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 9, 5, 9),
-          child: Row(
-            children: [
-              Container(
-                height: 43,
-                width: 43,
-                decoration: BoxDecoration(
-                  color: AppColors.hotRose.withValues(alpha: 0.13),
-                  shape: BoxShape.circle,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 9, 5, 9),
+            child: Row(
+              children: [
+                Container(
+                  height: 43,
+                  width: 43,
+                  decoration: BoxDecoration(
+                    color: AppColors.hotRose.withValues(alpha: 0.13),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.home_work_outlined,
+                    color: AppColors.hotRose,
+                    size: 23,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.home_work_outlined,
-                  color: AppColors.hotRose,
-                  size: 23,
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        shelter.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.subtitle.copyWith(fontSize: 12),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        '${shelter.formattedDistance} • '
+                        '${shelter.isCovered ? 'Coberto' : 'Sem cobertura'}',
+                        style: AppTypography.caption.copyWith(fontSize: 10),
+                      ),
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.accessibility_new,
+                            color: AppColors.darkAmethyst,
+                            size: 13,
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            shelter.isAccessible == true
+                                ? 'Acessível'
+                                : 'Não acessível',
+                            style: AppTypography.caption.copyWith(fontSize: 10),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      shelter.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.subtitle.copyWith(fontSize: 12),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      '${shelter.formattedDistance} • '
-                      '${shelter.isCovered ? 'Coberto' : 'Sem cobertura'}',
-                      style: AppTypography.caption.copyWith(fontSize: 10),
-                    ),
-                    const SizedBox(height: 2),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.accessibility_new,
-                          color: AppColors.darkAmethyst,
-                          size: 13,
-                        ),
-                        const SizedBox(width: 3),
-                        Text(
-                          shelter.isAccessible ? 'Acessível' : 'Não acessível',
-                          style: AppTypography.caption.copyWith(fontSize: 10),
-                        ),
-                      ],
-                    ),
-                  ],
+                IconButton(
+                  onPressed: onFavorite,
+                  tooltip: isFavorite
+                      ? 'Remover dos favoritos'
+                      : 'Adicionar aos favoritos',
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: isFavorite
+                        ? AppColors.hotRose
+                        : AppColors.darkAmethyst.withValues(alpha: 0.55),
+                    size: 17,
+                  ),
                 ),
-              ),
-              IconButton(
-                onPressed: onFavorite,
-                tooltip: isFavorite
-                    ? 'Remover dos favoritos'
-                    : 'Adicionar aos favoritos',
-                icon: Icon(
-                  isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: isFavorite
-                      ? AppColors.hotRose
-                      : AppColors.darkAmethyst.withValues(alpha: 0.55),
-                  size: 17,
+                const Icon(
+                  Icons.chevron_right,
+                  color: AppColors.darkAmethyst,
+                  size: 18,
                 ),
-              ),
-              const Icon(
-                Icons.chevron_right,
-                color: AppColors.darkAmethyst,
-                size: 18,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -307,21 +327,15 @@ class _ShelterCard extends StatelessWidget {
 }
 
 class _EmptyShelters extends StatelessWidget {
-  const _EmptyShelters({required this.filter});
-
-  final _ShelterFilter filter;
+  const _EmptyShelters();
 
   @override
   Widget build(BuildContext context) {
-    final message = filter == _ShelterFilter.favorites
-        ? 'Você ainda não marcou nenhum abrigo como favorito.'
-        : 'Ainda não há abrigos avaliados.';
-
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Text(
-          message,
+          'Você ainda não marcou nenhum abrigo como favorito.',
           textAlign: TextAlign.center,
           style: AppTypography.body.copyWith(fontSize: 13),
         ),

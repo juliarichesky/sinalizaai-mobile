@@ -5,15 +5,27 @@ class Shelter {
     required this.distanceMeters,
     required this.isCovered,
     required this.isAccessible,
-    this.hasRating = false,
+    required this.features,
+    this.address,
+    this.capacity,
+    this.openingHours,
+    this.contact,
+    this.observations,
+    this.imageAsset,
   });
 
   final String id;
   final String name;
   final int distanceMeters;
   final bool isCovered;
-  final bool isAccessible;
-  final bool hasRating;
+  final bool? isAccessible;
+  final List<String> features;
+  final String? address;
+  final String? capacity;
+  final String? openingHours;
+  final String? contact;
+  final String? observations;
+  final String? imageAsset;
 
   String get formattedDistance {
     if (distanceMeters >= 1000) {
@@ -32,6 +44,13 @@ const mockShelters = [
     distanceMeters: 350,
     isCovered: true,
     isAccessible: true,
+    features: const [
+      'Cobertura',
+      'Bancos',
+      'Acessibilidade (rampa)',
+      'Iluminação',
+    ],
+    observations: 'Informações fictícias para demonstração.',
   ),
   Shelter(
     id: 'consolacao',
@@ -39,6 +58,8 @@ const mockShelters = [
     distanceMeters: 750,
     isCovered: true,
     isAccessible: true,
+    features: const ['Cobertura', 'Bancos', 'Água potável'],
+    observations: 'Dados demonstrativos; confirme as condições no local.',
   ),
   Shelter(
     id: 'augusta',
@@ -46,5 +67,7 @@ const mockShelters = [
     distanceMeters: 1200,
     isCovered: false,
     isAccessible: true,
+    features: const ['Bancos', 'Área de descanso', 'Iluminação'],
+    observations: 'Dados demonstrativos; cobertura não informada.',
   ),
 ];
