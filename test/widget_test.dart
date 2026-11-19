@@ -13,7 +13,7 @@ void main() {
   ) async {
     await tester.pumpWidget(const MyApp());
 
-    expect(find.text('Sinaliza.Ai'), findsOneWidget);
+    expect(find.text('Mobilidade inteligente,'), findsOneWidget);
     expect(find.text('Começar'), findsOneWidget);
 
     await tester.pump(const Duration(seconds: 2));
