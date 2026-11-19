@@ -6,9 +6,14 @@ import '../data/mock_user.dart';
 import '../widgets/app_bottom_navigation.dart';
 import '../widgets/app_snackbar.dart';
 import 'alerts_screen.dart';
+import 'about_app_screen.dart';
 import 'home_screen.dart';
 import 'login_screen.dart';
 import 'map_screen.dart';
+import 'profile_accessibility_screen.dart';
+import 'profile_data_screen.dart';
+import 'profile_help_screen.dart';
+import 'profile_preferences_screen.dart';
 import 'shelters_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -28,7 +33,21 @@ class ProfileScreen extends StatelessWidget {
   }
 
   void _openOption(BuildContext context, String option) {
-    _showMessage(context, '$option estará disponível em breve.');
+    final Widget? destination = switch (option) {
+      'Meus dados' => const ProfileDataScreen(),
+      'Preferências' => const ProfilePreferencesScreen(),
+      'Acessibilidade' => const ProfileAccessibilityScreen(),
+      'Ajuda e suporte' => const ProfileHelpScreen(),
+      'Sobre o app' => const AboutAppScreen(),
+      _ => null,
+    };
+
+    if (destination == null) {
+      _showMessage(context, '$option estará disponível em breve.');
+      return;
+    }
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => destination));
   }
 
   void _goBack(BuildContext context) {

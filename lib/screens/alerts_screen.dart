@@ -136,6 +136,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                         Expanded(
                           child: _FilterChip(
                             label: 'Todos',
+                            icon: Icons.tune,
                             isSelected: _selectedFilter == _AlertFilter.all,
                             onTap: () => setState(
                               () => _selectedFilter = _AlertFilter.all,
@@ -146,6 +147,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                         Expanded(
                           child: _FilterChip(
                             label: 'Enchentes',
+                            icon: Icons.water,
                             isSelected: _selectedFilter == _AlertFilter.floods,
                             onTap: () => setState(
                               () => _selectedFilter = _AlertFilter.floods,
@@ -156,6 +158,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
                         Expanded(
                           child: _FilterChip(
                             label: 'Trânsito',
+                            icon: Icons.traffic,
                             isSelected: _selectedFilter == _AlertFilter.traffic,
                             onTap: () => setState(
                               () => _selectedFilter = _AlertFilter.traffic,
@@ -259,11 +262,13 @@ class _AlertsHeader extends StatelessWidget {
 class _FilterChip extends StatelessWidget {
   const _FilterChip({
     required this.label,
+    required this.icon,
     required this.isSelected,
     required this.onTap,
   });
 
   final String label;
+  final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -284,14 +289,28 @@ class _FilterChip extends StatelessWidget {
             width: double.infinity,
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 11),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: AppTypography.caption.copyWith(
-                color: isSelected ? Colors.white : AppColors.darkAmethyst,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  icon,
+                  color: isSelected ? Colors.white : AppColors.darkAmethyst,
+                  size: 16,
+                ),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.caption.copyWith(
+                      color: isSelected ? Colors.white : AppColors.darkAmethyst,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

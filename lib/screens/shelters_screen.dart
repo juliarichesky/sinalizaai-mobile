@@ -136,6 +136,7 @@ class _SheltersScreenState extends State<SheltersScreen> {
                             Expanded(
                               child: _ShelterFilterChip(
                                 label: 'Próximos',
+                                icon: Icons.near_me_outlined,
                                 isSelected:
                                     _selectedFilter == _ShelterFilter.nearby,
                                 onTap: () => setState(
@@ -147,6 +148,7 @@ class _SheltersScreenState extends State<SheltersScreen> {
                             Expanded(
                               child: _ShelterFilterChip(
                                 label: 'Favoritos',
+                                icon: Icons.favorite_border,
                                 isSelected:
                                     _selectedFilter == _ShelterFilter.favorites,
                                 onTap: () => setState(
@@ -263,11 +265,13 @@ class _SheltersHeader extends StatelessWidget {
 class _ShelterFilterChip extends StatelessWidget {
   const _ShelterFilterChip({
     required this.label,
+    required this.icon,
     required this.isSelected,
     required this.onTap,
   });
 
   final String label;
+  final IconData icon;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -288,14 +292,28 @@ class _ShelterFilterChip extends StatelessWidget {
             width: double.infinity,
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 9),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: AppTypography.caption.copyWith(
-                color: isSelected ? Colors.white : AppColors.darkAmethyst,
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-              ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  icon,
+                  color: isSelected ? Colors.white : AppColors.darkAmethyst,
+                  size: 16,
+                ),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.caption.copyWith(
+                      color: isSelected ? Colors.white : AppColors.darkAmethyst,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

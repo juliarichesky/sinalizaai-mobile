@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
+import '../data/app_preferences.dart';
 import '../data/mock_user.dart';
 import '../widgets/app_bottom_navigation.dart';
 import '../widgets/app_snackbar.dart';
@@ -255,78 +256,74 @@ class _FeatureCard extends StatelessWidget {
   }
 }
 
-class _NotificationInfoCard extends StatefulWidget {
+class _NotificationInfoCard extends StatelessWidget {
   const _NotificationInfoCard();
 
   @override
-  State<_NotificationInfoCard> createState() => _NotificationInfoCardState();
-}
-
-class _NotificationInfoCardState extends State<_NotificationInfoCard> {
-  bool _notificationsEnabled = false;
-
-  @override
   Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      label: 'Notificações',
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(18, 16, 12, 16),
-        decoration: BoxDecoration(
-          color: AppColors.sunflowerGold.withValues(alpha: 0.88),
-          borderRadius: BorderRadius.circular(22),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 54,
-              width: 54,
-              child: Icon(
-                Icons.notifications_active_outlined,
-                color: AppColors.hotRose,
-                size: 30,
+    return ValueListenableBuilder<bool>(
+      valueListenable: appNotificationsEnabled,
+      builder: (context, notificationsEnabled, _) => Semantics(
+        container: true,
+        label: 'Notificações',
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(18, 16, 12, 16),
+          decoration: BoxDecoration(
+            color: AppColors.sunflowerGold.withValues(alpha: 0.88),
+            borderRadius: BorderRadius.circular(22),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 54,
+                width: 54,
+                child: Icon(
+                  Icons.notifications_active_outlined,
+                  color: AppColors.hotRose,
+                  size: 30,
+                ),
               ),
-            ),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Fique sempre informado',
-                    style: AppTypography.subtitle.copyWith(
-                      color: AppColors.darkAmethyst,
-                      fontSize: 17,
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Fique sempre informado',
+                      style: AppTypography.subtitle.copyWith(
+                        color: AppColors.darkAmethyst,
+                        fontSize: 17,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    'Ative ou desative os alertas do aplicativo.',
-                    style: AppTypography.caption.copyWith(
-                      color: AppColors.nightBordeaux,
-                      fontSize: 14,
+                    const SizedBox(height: 5),
+                    Text(
+                      'Ative ou desative os alertas do aplicativo.',
+                      style: AppTypography.caption.copyWith(
+                        color: AppColors.nightBordeaux,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Transform.scale(
-              scale: 0.78,
-              child: Switch.adaptive(
-                value: _notificationsEnabled,
-                activeThumbColor: Colors.white,
-                activeTrackColor: AppColors.hotRose,
-                inactiveThumbColor: AppColors.hotRose,
-                inactiveTrackColor: Colors.white,
-                trackOutlineColor: MaterialStatePropertyAll(Colors.white),
-                trackOutlineWidth: MaterialStatePropertyAll(0),
-                onChanged: (enabled) {
-                  setState(() => _notificationsEnabled = enabled);
-                },
+              Transform.scale(
+                scale: 0.78,
+                child: Switch.adaptive(
+                  value: notificationsEnabled,
+                  activeThumbColor: Colors.white,
+                  activeTrackColor: AppColors.hotRose,
+                  inactiveThumbColor: AppColors.hotRose,
+                  inactiveTrackColor: Colors.white,
+                  trackOutlineColor: MaterialStatePropertyAll(Colors.white),
+                  trackOutlineWidth: MaterialStatePropertyAll(0),
+                  onChanged: (enabled) {
+                    appNotificationsEnabled.value = enabled;
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
