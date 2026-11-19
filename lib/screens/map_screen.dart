@@ -9,6 +9,7 @@ import 'alerts_screen.dart';
 import 'home_screen.dart';
 import 'shelter_detail_screen.dart';
 import 'shelters_screen.dart';
+import 'traffic_light_detail_screen.dart';
 
 enum _MapMode { trafficLights, shelters }
 
@@ -62,6 +63,15 @@ class _MapScreenState extends State<MapScreen> {
       _searchController.clear();
     });
     _searchFocusNode.unfocus();
+  }
+
+  void _openTrafficDetails(int index) {
+    _selectTrafficPoint(index);
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => TrafficLightDetailScreen(point: _trafficPoints[index]),
+      ),
+    );
   }
 
   void _selectMode(_MapMode mode) {
@@ -167,7 +177,7 @@ class _MapScreenState extends State<MapScreen> {
                             child: _MapMarker(
                               point: _trafficPoints[index],
                               isSelected: index == _selectedTrafficIndex,
-                              onTap: () => _selectTrafficPoint(index),
+                              onTap: () => _openTrafficDetails(index),
                             ),
                           ),
                       if (_selectedMode == _MapMode.shelters)
@@ -196,7 +206,11 @@ class _MapScreenState extends State<MapScreen> {
                           left: 14,
                           right: 14,
                           bottom: 70,
-                          child: _PointInfoCard(point: _selectedPoint),
+                          child: _PointInfoCard(
+                            point: _selectedPoint,
+                            onDetails: () =>
+                                _openTrafficDetails(_selectedTrafficIndex),
+                          ),
                         ),
                       if (_selectedMode == _MapMode.shelters &&
                           _selectedShelterIndex != null)
@@ -585,9 +599,10 @@ class _MapMarker extends StatelessWidget {
 }
 
 class _PointInfoCard extends StatelessWidget {
-  const _PointInfoCard({required this.point});
+  const _PointInfoCard({required this.point, required this.onDetails});
 
   final MapPoint point;
+  final VoidCallback onDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -660,6 +675,7 @@ class _PointInfoCard extends StatelessWidget {
                 ],
               ),
             ),
+            TextButton(onPressed: onDetails, child: const Text('Ver detalhes')),
           ],
         ),
       ),
