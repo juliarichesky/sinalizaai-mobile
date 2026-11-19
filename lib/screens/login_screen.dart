@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
+import 'register_screen.dart';
 import '../widgets/app_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -51,6 +52,11 @@ class _LoginScreenState extends State<LoginScreen> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void _openRegister() {
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (_) => const RegisterScreen()));
   }
 
   InputDecoration _inputDecoration({
@@ -228,8 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: AppTypography.caption,
                             ),
                             TextButton(
-                              onPressed: () =>
-                                  _showMessage('Cadastro disponível em breve.'),
+                              onPressed: _openRegister,
                               style: TextButton.styleFrom(
                                 foregroundColor: AppColors.hotRose,
                                 padding: EdgeInsets.zero,
