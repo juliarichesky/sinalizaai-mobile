@@ -14,10 +14,13 @@ void main() {
     await tester.pumpWidget(const MyApp());
 
     expect(find.text('Sinaliza.Ai'), findsOneWidget);
-    expect(find.text('Entrar'), findsOneWidget);
-    expect(find.text('Criar conta'), findsOneWidget);
+    expect(find.text('Começar'), findsOneWidget);
 
     await tester.pump(const Duration(seconds: 2));
+
+    expect(find.text('Entrar na sua conta'), findsNothing);
+
+    await tester.tap(find.text('Começar'));
     await tester.pumpAndSettle();
 
     expect(find.text('Entrar na sua conta'), findsOneWidget);
@@ -27,9 +30,7 @@ void main() {
   testWidgets('valida os campos obrigatórios do Login', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const MyApp());
-    await tester.pump(const Duration(seconds: 2));
-    await tester.pumpAndSettle();
+    await _pumpLogin(tester);
 
     await tester.tap(find.text('Entrar'));
     await tester.pump();
@@ -41,9 +42,7 @@ void main() {
   testWidgets('entra na Home quando o Login é válido', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const MyApp());
-    await tester.pump(const Duration(seconds: 2));
-    await tester.pumpAndSettle();
+    await _pumpLogin(tester);
 
     final fields = find.byType(TextFormField);
     await tester.enterText(fields.at(0), 'julia@email.com');
@@ -59,9 +58,7 @@ void main() {
   testWidgets('navega para Cadastro e exige aceite dos termos', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const MyApp());
-    await tester.pump(const Duration(seconds: 2));
-    await tester.pumpAndSettle();
+    await _pumpLogin(tester);
 
     await tester.tap(find.text('Cadastre-se'));
     await tester.pumpAndSettle();
@@ -195,4 +192,10 @@ void main() {
     expect(find.text('Buscar endereço'), findsOneWidget);
     expect(find.text('Semáforos'), findsOneWidget);
   });
+}
+
+Future<void> _pumpLogin(WidgetTester tester) async {
+  await tester.pumpWidget(const MyApp());
+  await tester.tap(find.text('Começar'));
+  await tester.pumpAndSettle();
 }

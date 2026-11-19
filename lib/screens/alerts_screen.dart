@@ -185,10 +185,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
 }
 
 class _AlertsHeader extends StatelessWidget {
-  const _AlertsHeader({
-    required this.onBack,
-    required this.showBackButton,
-  });
+  const _AlertsHeader({required this.onBack, required this.showBackButton});
 
   final VoidCallback onBack;
   final bool showBackButton;

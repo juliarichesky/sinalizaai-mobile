@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,13 +15,10 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Timer? _timer;
-
   @override
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    _timer = Timer(const Duration(seconds: 2), _goToNextScreen);
   }
 
   void _goToNextScreen() {
@@ -34,20 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute<void>(builder: (_) => widget.nextScreen),
     );
-  }
-
-  void _showSignupMessage() {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        const SnackBar(content: Text('Cadastro disponível em breve.')),
-      );
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
   }
 
   @override
@@ -101,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             Positioned(
-              bottom: 32,
+              bottom: 24,
               left: 0,
               right: 0,
               child: Padding(
@@ -112,29 +93,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: AppButton(
-                        text: 'Entrar',
+                        text: 'Começar',
                         onPressed: _goToNextScreen,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: _showSignupMessage,
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: Text(
-                        'Criar conta',
-                        style: AppTypography.body.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          shadows: const [
-                            Shadow(
-                              color: AppColors.darkAmethyst,
-                              blurRadius: 6,
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   ],
