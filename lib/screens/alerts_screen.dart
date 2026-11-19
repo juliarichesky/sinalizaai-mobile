@@ -51,16 +51,16 @@ class _AlertsScreenState extends State<AlertsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lavenderVeil,
+      backgroundColor: AppColors.softBackground,
       body: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              AppColors.lavenderVeil,
+              AppColors.softBackground,
               Colors.white.withValues(alpha: 0.72),
-              AppColors.lavenderVeil.withValues(alpha: 0.8),
+              AppColors.softBackground.withValues(alpha: 0.8),
             ],
           ),
         ),

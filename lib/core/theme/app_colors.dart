@@ -6,4 +6,5 @@ abstract final class AppColors {
   static const Color hotRose = Color(0xFFC2286B);
   static const Color nightBordeaux = Color(0xFF5B1C2E);
   static const Color darkAmethyst = Color(0xFF25104D);
+  static const Color softBackground = Color(0xFFFFF8FE);
 }

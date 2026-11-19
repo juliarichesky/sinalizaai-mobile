@@ -83,7 +83,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.lavenderVeil,
+      backgroundColor: AppColors.softBackground,
       bottomNavigationBar: AppBottomNavigation(
         selectedIndex: 1,
         onItemSelected: _handleNavigation,

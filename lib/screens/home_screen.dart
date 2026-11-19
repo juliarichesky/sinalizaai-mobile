@@ -234,7 +234,7 @@ class _FeatureCard extends StatelessWidget {
       button: true,
       label: '$title. $description',
       child: Material(
-        color: AppColors.lavenderVeil,
+        color: AppColors.softBackground,
         borderRadius: BorderRadius.circular(18),
         child: InkWell(
           onTap: onTap,

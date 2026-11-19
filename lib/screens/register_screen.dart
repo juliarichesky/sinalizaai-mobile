@@ -171,13 +171,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: AppColors.lavenderVeil,
+        statusBarColor: AppColors.softBackground,
         statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: AppColors.lavenderVeil,
+        systemNavigationBarColor: AppColors.softBackground,
         systemNavigationBarIconBrightness: Brightness.dark,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.lavenderVeil,
+        backgroundColor: AppColors.softBackground,
         body: SafeArea(
           child: LayoutBuilder(
             builder: (context, constraints) {

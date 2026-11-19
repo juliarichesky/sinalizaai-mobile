@@ -22,7 +22,7 @@ class AppBottomNavigation extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.fromLTRB(12, 8, 12, bottomInset + 8),
         decoration: const BoxDecoration(
-          color: AppColors.lavenderVeil,
+          color: AppColors.softBackground,
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Row(
