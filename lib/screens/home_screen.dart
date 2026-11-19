@@ -7,6 +7,7 @@ import '../widgets/app_bottom_navigation.dart';
 import 'alerts_screen.dart';
 import 'map_screen.dart';
 import 'profile_screen.dart';
+import 'shelters_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -27,6 +28,12 @@ class HomeScreen extends StatelessWidget {
       );
       return;
     }
+    if (index == 2) {
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute<void>(builder: (_) => const SheltersScreen()));
+      return;
+    }
     if (index == 3) {
       Navigator.of(context)
           .push(MaterialPageRoute<void>(builder: (_) => const AlertsScreen()));
@@ -38,11 +45,7 @@ class HomeScreen extends StatelessWidget {
       return;
     }
 
-    final messages = {
-      2: 'Ações rápidas estarão disponíveis em breve.',
-      3: 'Alertas estarão disponíveis em breve.',
-    };
-    _showMessage(context, messages[index]!);
+    _showMessage(context, 'Esta funcionalidade estará disponível em breve.');
   }
 
   @override
@@ -126,6 +129,16 @@ class HomeScreen extends StatelessWidget {
                             onTap: () => _showMessage(
                               context,
                               'O mapa estará disponível em breve.',
+                            ),
+                          ),
+                          _FeatureCard(
+                            icon: Icons.home_work_outlined,
+                            title: 'Abrigos',
+                            description: 'Locais seguros',
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const SheltersScreen(),
+                              ),
                             ),
                           ),
                         ],

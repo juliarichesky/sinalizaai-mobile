@@ -6,6 +6,7 @@ import '../data/mock_map_points.dart';
 import '../widgets/app_bottom_navigation.dart';
 import 'alerts_screen.dart';
 import 'home_screen.dart';
+import 'shelters_screen.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -66,18 +67,19 @@ class _MapScreenState extends State<MapScreen> {
       );
       return;
     }
+    if (index == 2) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute<void>(builder: (_) => const SheltersScreen()),
+      );
+      return;
+    }
     if (index == 3) {
       Navigator.of(context)
           .push(MaterialPageRoute<void>(builder: (_) => const AlertsScreen()));
       return;
     }
 
-    final messages = {
-      2: 'Ações rápidas estarão disponíveis em breve.',
-      3: 'Alertas estarão disponíveis em breve.',
-      4: 'O perfil estará disponível em breve.',
-    };
-    _showMessage(messages[index]!);
+    _showMessage('Esta funcionalidade estará disponível em breve.');
   }
 
   @override

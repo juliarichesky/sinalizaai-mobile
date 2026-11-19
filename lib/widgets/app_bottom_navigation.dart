@@ -39,7 +39,12 @@ class AppBottomNavigation extends StatelessWidget {
               isSelected: selectedIndex == 1,
               onTap: () => onItemSelected(1),
             ),
-            _CenterAction(onTap: () => onItemSelected(2)),
+            _NavItem(
+              icon: Icons.home_work_outlined,
+              label: 'Abrigos',
+              isSelected: selectedIndex == 2,
+              onTap: () => onItemSelected(2),
+            ),
             _NavItem(
               icon: Icons.notifications_none,
               label: 'Alertas',
@@ -102,34 +107,6 @@ class _NavItem extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CenterAction extends StatelessWidget {
-  const _CenterAction({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: 'Adicionar',
-      child: InkWell(
-        onTap: onTap,
-        customBorder: const CircleBorder(),
-        child: Container(
-          height: 48,
-          width: 48,
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          decoration: const BoxDecoration(
-            color: AppColors.hotRose,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(Icons.add, color: Colors.white, size: 27),
         ),
       ),
     );
