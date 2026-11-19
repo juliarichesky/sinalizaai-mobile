@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:meu_app/main.dart';
 import 'package:meu_app/screens/home_screen.dart';
+import 'package:meu_app/screens/map_screen.dart';
 
 void main() {
   testWidgets('navega da Splash Screen para o Login',
@@ -94,8 +95,26 @@ void main() {
     expect(find.text('Início'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.map_outlined));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Buscar endereço'), findsOneWidget);
+  });
+
+  testWidgets('busca e seleciona um ponto mockado no Mapa',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: MapScreen()),
+    );
+
+    expect(find.text('Semáforo Av. Paulista'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), 'Rua Augusta');
     await tester.pump();
 
-    expect(find.text('O mapa estará disponível em breve.'), findsOneWidget);
+    expect(find.text('Semáforo Rua Augusta'), findsOneWidget);
+    await tester.tap(find.text('Semáforo Rua Augusta'));
+    await tester.pump();
+
+    expect(find.text('Semáforo Rua Augusta'), findsOneWidget);
   });
 }
