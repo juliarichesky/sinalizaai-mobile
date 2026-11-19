@@ -15,6 +15,7 @@ import 'profile_data_screen.dart';
 import 'profile_help_screen.dart';
 import 'profile_preferences_screen.dart';
 import 'shelters_screen.dart';
+import '../services/local_auth_service.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({
@@ -121,7 +122,7 @@ class ProfileScreen extends StatelessWidget {
       return;
     }
 
-    // Ainda não há sessão persistente neste protótipo para limpar.
+    await LocalAuthService.instance.logout();
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute<void>(builder: (_) => const LoginScreen()),
       (route) => false,
@@ -155,7 +156,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     _UserSummary(
-                      user: mockUser,
+                      user: activeUser ?? mockUser,
                       onEditPhoto: () => _showMessage(
                         context,
                         'A troca de foto estará disponível em breve.',

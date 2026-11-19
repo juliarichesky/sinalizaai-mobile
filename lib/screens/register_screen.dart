@@ -6,6 +6,7 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 import '../widgets/app_snackbar.dart';
 import '../widgets/app_button.dart';
+import '../services/local_auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -92,7 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         : 'As senhas não são iguais. Tente novamente.';
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     final isValid = _formKey.currentState?.validate() ?? false;
     setState(() {
       _hasSubmitted = true;
@@ -103,7 +104,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    _showMessage('Cadastro pronto para integração.');
+    try {
+      await LocalAuthService.instance.register(
+        fullName: _nameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    } on LocalAuthException catch (error) {
+      if (!mounted) return;
+      _showMessage(error.message);
+      return;
+    }
+    if (!mounted) return;
+    _showMessage('Cadastro realizado com sucesso!');
+    Navigator.of(context).pop();
   }
 
   void _validateAfterEdit(String _) {

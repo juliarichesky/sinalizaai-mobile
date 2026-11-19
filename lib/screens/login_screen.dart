@@ -7,6 +7,7 @@ import '../widgets/app_snackbar.dart';
 import 'main_navigation_screen.dart';
 import 'register_screen.dart';
 import '../widgets/app_button.dart';
+import '../services/local_auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -42,11 +43,22 @@ class _LoginScreenState extends State<LoginScreen> {
     return value == null || value.isEmpty ? 'Informe sua senha.' : null;
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) {
       return;
     }
 
+    try {
+      await LocalAuthService.instance.login(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+    } on LocalAuthException catch (error) {
+      if (!mounted) return;
+      AppSnackBar.show(context, error.message, type: AppSnackBarType.error);
+      return;
+    }
+    if (!mounted) return;
     AppSnackBar.show(
       context,
       'Login realizado com sucesso!',

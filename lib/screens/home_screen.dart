@@ -91,9 +91,13 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         _Header(
-                          firstName: mockUser.fullName.trim().isEmpty
+                          firstName:
+                              (activeUser ?? mockUser).fullName.trim().isEmpty
                               ? 'usuário'
-                              : mockUser.fullName.trim().split(' ').first,
+                              : (activeUser ?? mockUser).fullName
+                                    .trim()
+                                    .split(' ')
+                                    .first,
                         ),
                         const SizedBox(height: 54),
                         GridView.count(

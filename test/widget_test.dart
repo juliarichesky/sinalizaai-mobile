@@ -6,11 +6,15 @@ import 'package:meu_app/screens/alerts_screen.dart';
 import 'package:meu_app/screens/home_screen.dart';
 import 'package:meu_app/screens/main_navigation_screen.dart';
 import 'package:meu_app/screens/map_screen.dart';
+import 'package:meu_app/services/local_auth_service.dart';
 
 void main() {
+  LocalAuthService.instance.configureInMemoryForTesting();
+
   testWidgets('navega da Splash Screen para o Login', (
     WidgetTester tester,
   ) async {
+    await LocalAuthService.instance.logout();
     await tester.pumpWidget(const MyApp());
 
     expect(find.text('Mobilidade inteligente,'), findsOneWidget);
@@ -42,6 +46,7 @@ void main() {
   testWidgets('entra na Home quando o Login é válido', (
     WidgetTester tester,
   ) async {
+    await _prepareTestAccount();
     await _pumpLogin(tester);
 
     final fields = find.byType(TextFormField);
@@ -195,13 +200,27 @@ void main() {
     await tester.tap(find.byIcon(Icons.map_outlined).last);
     await tester.pump();
     expect(find.text('Semáforo Av. Paulista'), findsOneWidget);
-    expect(find.text('Ver detalhes'), findsOneWidget);
+    expect(find.text('Detalhes'), findsOneWidget);
     expect(find.text('Status: Liberado'), findsOneWidget);
   });
 }
 
 Future<void> _pumpLogin(WidgetTester tester) async {
+  await LocalAuthService.instance.logout();
   await tester.pumpWidget(const MyApp());
   await tester.tap(find.text('Começar'));
   await tester.pumpAndSettle();
+}
+
+Future<void> _prepareTestAccount() async {
+  await LocalAuthService.instance.logout();
+  try {
+    await LocalAuthService.instance.register(
+      fullName: 'Julia Guimarães',
+      email: 'julia@email.com',
+      password: 'senha123',
+    );
+  } on LocalAuthException {
+    // A conta pode existir de uma execução anterior do teste.
+  }
 }

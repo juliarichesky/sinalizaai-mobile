@@ -20,3 +20,13 @@ const mockUser = MockUser(
   fullName: 'Julia Guimarães',
   email: 'julia@email.com',
 );
+
+MockUser? activeUser;
+
+void setActiveUser(MockUser user) {
+  activeUser = user;
+}
+
+void clearActiveUser() {
+  activeUser = null;
+}

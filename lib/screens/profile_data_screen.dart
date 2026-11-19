@@ -20,8 +20,9 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: mockUser.fullName);
-    _emailController = TextEditingController(text: mockUser.email);
+    final user = activeUser ?? mockUser;
+    _nameController = TextEditingController(text: user.fullName);
+    _emailController = TextEditingController(text: user.email);
   }
 
   @override
@@ -63,7 +64,7 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
                   radius: 34,
                   backgroundColor: AppColors.sunflowerGold,
                   child: Text(
-                    mockUser.initials,
+                    (activeUser ?? mockUser).initials,
                     style: AppTypography.heading.copyWith(
                       color: AppColors.hotRose,
                       fontSize: 23,
@@ -75,9 +76,15 @@ class _ProfileDataScreenState extends State<ProfileDataScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(mockUser.fullName, style: AppTypography.subtitle),
+                      Text(
+                        (activeUser ?? mockUser).fullName,
+                        style: AppTypography.subtitle,
+                      ),
                       const SizedBox(height: 3),
-                      Text(mockUser.email, style: AppTypography.caption),
+                      Text(
+                        (activeUser ?? mockUser).email,
+                        style: AppTypography.caption,
+                      ),
                     ],
                   ),
                 ),

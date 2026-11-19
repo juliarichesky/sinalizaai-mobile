@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
+import '../data/mock_user.dart';
+import '../services/local_auth_service.dart';
+import 'main_navigation_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.nextScreen});
@@ -22,14 +25,26 @@ class _SplashScreenState extends State<SplashScreen> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 
-  void _goToNextScreen() {
+  Future<void> _goToNextScreen() async {
     if (!mounted || _hasStarted) {
       return;
     }
 
     setState(() => _hasStarted = true);
+    MockUser? user;
+    try {
+      user = await LocalAuthService.instance.restoreSession();
+    } on LocalAuthException {
+      user = null;
+    }
+    if (!mounted) {
+      return;
+    }
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute<void>(builder: (_) => widget.nextScreen),
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            user == null ? widget.nextScreen : const MainNavigationScreen(),
+      ),
     );
   }
 
