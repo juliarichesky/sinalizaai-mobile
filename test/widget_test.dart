@@ -154,7 +154,7 @@ void main() {
     expect(find.text('Alertas'), findsNWidgets(2));
     expect(find.text('Perfil'), findsOneWidget);
 
-    await tester.tap(find.text('Mapa').last);
+    await tester.tap(find.byIcon(Icons.map_outlined).last);
     await tester.pump();
     expect(find.text('Buscar endereço'), findsOneWidget);
 
@@ -187,24 +187,16 @@ void main() {
     expect(find.text('Alertas'), findsAtLeastNWidgets(1));
   });
 
-  testWidgets('abre detalhes a partir do marcador e preserva o mapa', (
+  testWidgets('exibe o card do ponto selecionado no mapa', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const MaterialApp(home: MainNavigationScreen()));
+    await tester.pumpWidget(const MaterialApp(home: MapScreen()));
 
-    await tester.tap(find.text('Mapa').last);
+    await tester.tap(find.byIcon(Icons.map_outlined).last);
     await tester.pump();
-    await tester.tap(find.byIcon(Icons.location_on).first);
-    await tester.pumpAndSettle();
-
-    expect(find.text('Semáforo'), findsOneWidget);
-    expect(find.text('Av. Paulista, 1573'), findsOneWidget);
-    expect(find.text('Status atual'), findsOneWidget);
-
-    await tester.tap(find.byTooltip('Voltar'));
-    await tester.pumpAndSettle();
-    expect(find.text('Buscar endereço'), findsOneWidget);
-    expect(find.text('Semáforos'), findsOneWidget);
+    expect(find.text('Semáforo Av. Paulista'), findsOneWidget);
+    expect(find.text('Ver detalhes'), findsOneWidget);
+    expect(find.text('Status: Liberado'), findsOneWidget);
   });
 }
 

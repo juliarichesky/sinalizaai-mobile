@@ -25,12 +25,12 @@ class AccessibilityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.softBackground,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
+              padding: const EdgeInsets.fromLTRB(18, 20, 18, 24),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: constraints.maxHeight - 32,
@@ -109,26 +109,41 @@ class _AccessibilityHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 42,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: onBack,
-              tooltip: 'Voltar',
-              icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-              color: AppColors.darkAmethyst,
-            ),
+    return Row(
+      children: [
+        IconButton(
+          onPressed: onBack,
+          tooltip: 'Voltar',
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          icon: const Icon(Icons.arrow_back_ios_new, size: 22),
+          color: AppColors.darkAmethyst,
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Acessibilidade',
+                style: AppTypography.heading.copyWith(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkAmethyst,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                'Mobilidade mais inclusiva para todos.',
+                style: AppTypography.body.copyWith(
+                  fontSize: 14,
+                  color: AppColors.darkAmethyst.withValues(alpha: 0.82),
+                ),
+              ),
+            ],
           ),
-          Text(
-            'Acessibilidade',
-            style: AppTypography.subtitle.copyWith(fontSize: 16),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -144,7 +159,7 @@ class _AccessibilityIllustration extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 2.2,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(22),
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -219,8 +234,10 @@ class _PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: FilledButton(
+      child: FilledButton.icon(
         onPressed: onTap,
+        icon: const Icon(Icons.search, size: 22),
+        label: const Text('Buscar rota acessível'),
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.hotRose,
           foregroundColor: Colors.white,
@@ -234,7 +251,6 @@ class _PrimaryButton extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        child: const Text('Buscar rota acessível'),
       ),
     );
   }
@@ -257,25 +273,23 @@ class _AccessibilityResource extends StatelessWidget {
       button: true,
       label: label,
       child: Material(
-        color: Colors.white.withValues(alpha: 0.72),
-        borderRadius: BorderRadius.circular(11),
+        color: Colors.white,
+        elevation: 1,
+        shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(22),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(11),
+          borderRadius: BorderRadius.circular(22),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
             child: Row(
               children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: AppColors.hotRose.withValues(alpha: 0.12),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(icon, color: AppColors.hotRose, size: 17),
+                SizedBox(
+                  height: 48,
+                  width: 48,
+                  child: Icon(icon, color: AppColors.hotRose, size: 23),
                 ),
-                const SizedBox(width: 9),
+                const SizedBox(width: 14),
                 Expanded(
                   child: Text(
                     label,
@@ -285,7 +299,7 @@ class _AccessibilityResource extends StatelessWidget {
                 const Icon(
                   Icons.chevron_right,
                   color: AppColors.darkAmethyst,
-                  size: 19,
+                  size: 22,
                 ),
               ],
             ),

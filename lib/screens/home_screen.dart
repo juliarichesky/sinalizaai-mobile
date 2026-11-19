@@ -114,8 +114,11 @@ class HomeScreen extends StatelessWidget {
                               title: 'Acessibilidade',
                               description: 'Rotas inclusivas',
                               onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute<void>(
-                                  builder: (_) => const AccessibilityScreen(),
+                                PageRouteBuilder<void>(
+                                  pageBuilder: (_, __, ___) =>
+                                      const AccessibilityScreen(),
+                                  transitionDuration: Duration.zero,
+                                  reverseTransitionDuration: Duration.zero,
                                 ),
                               ),
                             ),
@@ -212,13 +215,9 @@ class _FeatureCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   height: 58,
                   width: 58,
-                  decoration: BoxDecoration(
-                    color: AppColors.lavenderVeil.withValues(alpha: 0.72),
-                    borderRadius: BorderRadius.circular(18),
-                  ),
                   child: Icon(icon, color: AppColors.hotRose, size: 30),
                 ),
                 Column(
@@ -280,14 +279,10 @@ class _NotificationInfoCardState extends State<_NotificationInfoCard> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
+            const SizedBox(
               height: 54,
               width: 54,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.7),
-                borderRadius: BorderRadius.circular(17),
-              ),
-              child: const Icon(
+              child: Icon(
                 Icons.notifications_active_outlined,
                 color: AppColors.hotRose,
                 size: 30,
@@ -324,6 +319,8 @@ class _NotificationInfoCardState extends State<_NotificationInfoCard> {
                 activeTrackColor: AppColors.hotRose,
                 inactiveThumbColor: AppColors.hotRose,
                 inactiveTrackColor: Colors.white,
+                trackOutlineColor: MaterialStatePropertyAll(Colors.white),
+                trackOutlineWidth: MaterialStatePropertyAll(0),
                 onChanged: (enabled) {
                   setState(() => _notificationsEnabled = enabled);
                 },

@@ -75,16 +75,6 @@ class _SheltersScreenState extends State<SheltersScreen> {
     });
   }
 
-  void _openMap() {
-    if (widget.onNavigationRequested != null) {
-      widget.onNavigationRequested!(1);
-      return;
-    }
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute<void>(builder: (_) => const MapScreen()),
-    );
-  }
-
   void _handleNavigation(int index) {
     if (widget.onNavigationRequested != null) {
       widget.onNavigationRequested!(index);
@@ -96,7 +86,9 @@ class _SheltersScreenState extends State<SheltersScreen> {
           MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
         );
       case 1:
-        _openMap();
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute<void>(builder: (_) => const MapScreen()),
+        );
       case 2:
         break;
       case 3:
@@ -115,7 +107,7 @@ class _SheltersScreenState extends State<SheltersScreen> {
     final shelters = _visibleShelters;
 
     return Scaffold(
-      backgroundColor: AppColors.softBackground,
+      backgroundColor: Colors.white,
       bottomNavigationBar: widget.showBottomNavigation
           ? AppBottomNavigation(
               selectedIndex: 2,
@@ -126,26 +118,49 @@ class _SheltersScreenState extends State<SheltersScreen> {
         child: Column(
           children: [
             _SheltersHeader(onBack: _goBack, showBackButton: true),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+            Padding(
               padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
-              child: Row(
-                children: [
-                  _ShelterFilterChip(
-                    label: 'Próximos',
-                    isSelected: _selectedFilter == _ShelterFilter.nearby,
-                    onTap: () =>
-                        setState(() => _selectedFilter = _ShelterFilter.nearby),
-                  ),
-                  const SizedBox(width: 8),
-                  _ShelterFilterChip(
-                    label: 'Favoritos',
-                    isSelected: _selectedFilter == _ShelterFilter.favorites,
-                    onTap: () => setState(
-                      () => _selectedFilter = _ShelterFilter.favorites,
+              child: SizedBox(
+                width: double.infinity,
+                child: Material(
+                  color: Colors.white,
+                  elevation: 3,
+                  shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(24),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _ShelterFilterChip(
+                                label: 'Próximos',
+                                isSelected:
+                                    _selectedFilter == _ShelterFilter.nearby,
+                                onTap: () => setState(
+                                  () => _selectedFilter = _ShelterFilter.nearby,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: _ShelterFilterChip(
+                                label: 'Favoritos',
+                                isSelected:
+                                    _selectedFilter == _ShelterFilter.favorites,
+                                onTap: () => setState(
+                                  () => _selectedFilter =
+                                      _ShelterFilter.favorites,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
             Expanded(
@@ -185,10 +200,6 @@ class _SheltersScreenState extends State<SheltersScreen> {
                       },
                     ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),
-              child: _MapButton(onTap: _openMap),
-            ),
           ],
         ),
       ),
@@ -204,22 +215,45 @@ class _SheltersHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 52,
-      child: Stack(
-        alignment: Alignment.center,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 20, 18, 10),
+      child: Row(
         children: [
           if (showBackButton)
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                onPressed: onBack,
-                tooltip: 'Voltar',
-                icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                color: AppColors.darkAmethyst,
-              ),
+            IconButton(
+              onPressed: onBack,
+              tooltip: 'Voltar',
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+              icon: const Icon(Icons.arrow_back_ios_new, size: 22),
+              color: AppColors.darkAmethyst,
             ),
-          Text('Abrigos', style: AppTypography.subtitle.copyWith(fontSize: 17)),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Abrigos',
+                  style: AppTypography.heading.copyWith(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkAmethyst,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Encontre locais de apoio e proteção na sua região.',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.body.copyWith(
+                    fontSize: 14,
+                    color: AppColors.darkAmethyst.withValues(alpha: 0.82),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -245,23 +279,18 @@ class _ShelterFilterChip extends StatelessWidget {
       label: label,
       child: Material(
         color: isSelected ? AppColors.hotRose : Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           child: Container(
-            constraints: const BoxConstraints(minHeight: 34),
-            padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 7),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: isSelected
-                    ? AppColors.hotRose
-                    : AppColors.darkAmethyst.withValues(alpha: 0.14),
-              ),
-            ),
+            constraints: const BoxConstraints(minHeight: 46),
+            width: double.infinity,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 9),
             child: Text(
               label,
+              textAlign: TextAlign.center,
               style: AppTypography.caption.copyWith(
                 color: isSelected ? Colors.white : AppColors.darkAmethyst,
                 fontSize: 13,
@@ -300,25 +329,21 @@ class _ShelterCard extends StatelessWidget {
         color: Colors.white,
         elevation: 1,
         shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(22),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(22),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 9, 5, 9),
+            padding: const EdgeInsets.fromLTRB(16, 14, 10, 14),
             child: Row(
               children: [
-                Container(
-                  height: 43,
-                  width: 43,
-                  decoration: BoxDecoration(
-                    color: AppColors.hotRose.withValues(alpha: 0.13),
-                    shape: BoxShape.circle,
-                  ),
+                SizedBox(
+                  height: 52,
+                  width: 52,
                   child: const Icon(
                     Icons.home_work_outlined,
                     color: AppColors.hotRose,
-                    size: 23,
+                    size: 27,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -397,38 +422,6 @@ class _EmptyShelters extends StatelessWidget {
           'Você ainda não marcou nenhum abrigo como favorito.',
           textAlign: TextAlign.center,
           style: AppTypography.body.copyWith(fontSize: 13),
-        ),
-      ),
-    );
-  }
-}
-
-class _MapButton extends StatelessWidget {
-  const _MapButton({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: FilledButton.icon(
-        onPressed: onTap,
-        icon: const Icon(Icons.location_on_outlined, size: 24),
-        label: const Text('Ver no mapa'),
-        style: FilledButton.styleFrom(
-          backgroundColor: AppColors.hotRose,
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-          minimumSize: const Size.fromHeight(54),
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          textStyle: AppTypography.body.copyWith(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
         ),
       ),
     );

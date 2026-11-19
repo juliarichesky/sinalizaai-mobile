@@ -13,47 +13,57 @@ class TrafficLightDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.softBackground,
-      body: SafeArea(
-        child: Column(
-          children: [
-            _TrafficLightHeader(onBack: () => Navigator.of(context).pop()),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(18, 4, 18, 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _TrafficLightImage(point: point),
-                    const SizedBox(height: 14),
-                    _TrafficLightIdentity(point: point),
-                    const SizedBox(height: 16),
-                    _StatusCard(point: point),
-                    const SizedBox(height: 8),
-                    _TimeCard(point: point),
-                    const SizedBox(height: 8),
-                    _FlowCard(point: point),
-                    if (point.address != null ||
-                        point.intersection != null ||
-                        point.operationMode != null ||
-                        point.lastUpdated != null) ...[
-                      const SizedBox(height: 18),
-                      _CrossingInformation(point: point),
-                    ],
-                    const SizedBox(height: 12),
-                    Text(
-                      'Dados demonstrativos. As informações não representam '
-                      'condições verificadas em tempo real.',
-                      textAlign: TextAlign.center,
-                      style: AppTypography.caption.copyWith(
-                        color: AppColors.nightBordeaux.withValues(alpha: 0.75),
-                        fontSize: 13,
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/all_img.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              _TrafficLightHeader(onBack: () => Navigator.of(context).pop()),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(18, 4, 18, 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _TrafficLightImage(point: point),
+                      const SizedBox(height: 14),
+                      _TrafficLightIdentity(point: point),
+                      const SizedBox(height: 16),
+                      _StatusCard(point: point),
+                      const SizedBox(height: 8),
+                      _TimeCard(point: point),
+                      const SizedBox(height: 8),
+                      _FlowCard(point: point),
+                      if (point.address != null ||
+                          point.intersection != null ||
+                          point.operationMode != null ||
+                          point.lastUpdated != null) ...[
+                        const SizedBox(height: 18),
+                        _CrossingInformation(point: point),
+                      ],
+                      const SizedBox(height: 12),
+                      Text(
+                        'Dados demonstrativos. As informações não representam '
+                        'condições verificadas em tempo real.',
+                        textAlign: TextAlign.center,
+                        style: AppTypography.caption.copyWith(
+                          color: AppColors.nightBordeaux.withValues(
+                            alpha: 0.75,
+                          ),
+                          fontSize: 13,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -67,23 +77,41 @@ class _TrafficLightHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 52,
-      child: Stack(
-        alignment: Alignment.center,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 20, 18, 10),
+      child: Row(
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: onBack,
-              tooltip: 'Voltar',
-              icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-              color: AppColors.darkAmethyst,
-            ),
+          IconButton(
+            onPressed: onBack,
+            tooltip: 'Voltar',
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+            icon: const Icon(Icons.arrow_back_ios_new, size: 22),
+            color: AppColors.darkAmethyst,
           ),
-          Text(
-            'Semáforo',
-            style: AppTypography.subtitle.copyWith(fontSize: 17),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Detalhes do semáforo',
+                  style: AppTypography.heading.copyWith(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkAmethyst,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Acompanhe as condições do cruzamento.',
+                  style: AppTypography.body.copyWith(
+                    fontSize: 14,
+                    color: AppColors.darkAmethyst.withValues(alpha: 0.82),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -101,7 +129,7 @@ class _TrafficLightImage extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1.95,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(22),
         child: point.imageAsset == null
             ? DecoratedBox(
                 decoration: BoxDecoration(
@@ -222,14 +250,18 @@ class _MetricCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.darkAmethyst, size: 17),
+          SizedBox(
+            height: 38,
+            width: 38,
+            child: Icon(icon, color: AppColors.hotRose, size: 21),
+          ),
           const SizedBox(width: 9),
           Expanded(
             child: Text(
@@ -301,8 +333,8 @@ class _CrossingInformation extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 11, 12, 4),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

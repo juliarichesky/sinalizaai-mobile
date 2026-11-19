@@ -109,81 +109,94 @@ class _AlertsScreenState extends State<AlertsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.softBackground,
+      backgroundColor: Colors.white,
       bottomNavigationBar: widget.showBottomNavigation
           ? AppBottomNavigation(
               selectedIndex: 3,
               onItemSelected: _handleNavigation,
             )
           : null,
-      body: DecoratedBox(
-        decoration: BoxDecoration(color: Colors.white),
-        child: SafeArea(
-          child: Column(
-            children: [
-              _AlertsHeader(onBack: _goBack, showBackButton: true),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      _FilterChip(
-                        label: 'Todos',
-                        isSelected: _selectedFilter == _AlertFilter.all,
-                        onTap: () =>
-                            setState(() => _selectedFilter = _AlertFilter.all),
-                      ),
-                      const SizedBox(width: 8),
-                      _FilterChip(
-                        label: 'Enchentes',
-                        isSelected: _selectedFilter == _AlertFilter.floods,
-                        onTap: () => setState(
-                          () => _selectedFilter = _AlertFilter.floods,
+      body: SafeArea(
+        child: Column(
+          children: [
+            _AlertsHeader(onBack: _goBack, showBackButton: true),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: Material(
+                  color: Colors.white,
+                  elevation: 3,
+                  shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(24),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _FilterChip(
+                            label: 'Todos',
+                            isSelected: _selectedFilter == _AlertFilter.all,
+                            onTap: () => setState(
+                              () => _selectedFilter = _AlertFilter.all,
+                            ),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      _FilterChip(
-                        label: 'Trânsito',
-                        isSelected: _selectedFilter == _AlertFilter.traffic,
-                        onTap: () => setState(
-                          () => _selectedFilter = _AlertFilter.traffic,
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: _FilterChip(
+                            label: 'Enchentes',
+                            isSelected: _selectedFilter == _AlertFilter.floods,
+                            onTap: () => setState(
+                              () => _selectedFilter = _AlertFilter.floods,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: _FilterChip(
+                            label: 'Trânsito',
+                            isSelected: _selectedFilter == _AlertFilter.traffic,
+                            onTap: () => setState(
+                              () => _selectedFilter = _AlertFilter.traffic,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              Expanded(
-                child: _visibleAlerts.isEmpty
-                    ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(24),
-                          child: Text(
-                            'Nenhum alerta nesta categoria.',
-                            textAlign: TextAlign.center,
-                            style: AppTypography.body,
-                          ),
+            ),
+            Expanded(
+              child: _visibleAlerts.isEmpty
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Text(
+                          'Nenhum alerta nesta categoria.',
+                          textAlign: TextAlign.center,
+                          style: AppTypography.body,
                         ),
-                      )
-                    : ListView.separated(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                        itemCount: _visibleAlerts.length,
-                        separatorBuilder: (_, _) => const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          final alert = _visibleAlerts[index];
-                          return _AlertCard(
-                            alert: alert,
-                            color: _alertColor(alert),
-                            onTap: () => _showMessage(
-                              'Os detalhes deste alerta estarão disponíveis em breve.',
-                            ),
-                          );
-                        },
                       ),
-              ),
-            ],
-          ),
+                    )
+                  : ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                      itemCount: _visibleAlerts.length,
+                      separatorBuilder: (_, _) => const SizedBox(height: 10),
+                      itemBuilder: (context, index) {
+                        final alert = _visibleAlerts[index];
+                        return _AlertCard(
+                          alert: alert,
+                          color: _alertColor(alert),
+                          onTap: () => _showMessage(
+                            'Os detalhes deste alerta estarão disponíveis em breve.',
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
         ),
       ),
     );
@@ -198,28 +211,43 @@ class _AlertsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 56,
-      child: Stack(
-        alignment: Alignment.center,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 20, 18, 10),
+      child: Row(
         children: [
           if (showBackButton)
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                onPressed: onBack,
-                tooltip: 'Voltar',
-                icon: const Icon(
-                  Icons.arrow_back,
-                  color: AppColors.darkAmethyst,
-                ),
-              ),
-            ),
-          Text(
-            'Alertas',
-            style: AppTypography.subtitle.copyWith(
+            IconButton(
+              onPressed: onBack,
+              tooltip: 'Voltar',
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+              icon: const Icon(Icons.arrow_back_ios_new, size: 22),
               color: AppColors.darkAmethyst,
-              fontSize: 18,
+            ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Alertas',
+                  style: AppTypography.heading.copyWith(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkAmethyst,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Acompanhe avisos e condições importantes da sua região.',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.body.copyWith(
+                    fontSize: 14,
+                    color: AppColors.darkAmethyst.withValues(alpha: 0.82),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -246,29 +274,23 @@ class _FilterChip extends StatelessWidget {
       selected: isSelected,
       label: label,
       child: Material(
-        color: isSelected
-            ? AppColors.darkAmethyst
-            : Colors.white.withValues(alpha: 0.55),
+        color: isSelected ? AppColors.hotRose : Colors.transparent,
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(20),
           child: Container(
-            constraints: const BoxConstraints(minHeight: 36),
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: isSelected
-                    ? AppColors.darkAmethyst
-                    : AppColors.darkAmethyst.withValues(alpha: 0.12),
-              ),
-            ),
+            constraints: const BoxConstraints(minHeight: 46),
+            width: double.infinity,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 11),
             child: Text(
               label,
+              textAlign: TextAlign.center,
               style: AppTypography.caption.copyWith(
                 color: isSelected ? Colors.white : AppColors.darkAmethyst,
-                fontWeight: FontWeight.w600,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -296,25 +318,21 @@ class _AlertCard extends StatelessWidget {
       label: '${alert.title}. ${alert.description}. ${alert.time}',
       child: Material(
         color: Colors.white,
-        elevation: 1,
+        elevation: 2,
         shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(22),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(22),
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: 42,
-                  width: 42,
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.14),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(alert.icon, color: color, size: 23),
+                SizedBox(
+                  height: 52,
+                  width: 52,
+                  child: Icon(alert.icon, color: color, size: 27),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

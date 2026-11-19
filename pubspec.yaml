@@ -59,6 +59,7 @@ flutter:
     - assets/images/logo_colorida.png
     - assets/images/home_register_img.png
     - assets/images/home_img.png
+    - assets/images/all_img.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

@@ -112,7 +112,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.softBackground,
+      backgroundColor: Colors.white,
       bottomNavigationBar: showBottomNavigation
           ? AppBottomNavigation(
               selectedIndex: 4,
@@ -123,7 +123,7 @@ class ProfileScreen extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
+              padding: const EdgeInsets.fromLTRB(18, 20, 18, 24),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: constraints.maxHeight - 32,
@@ -180,27 +180,42 @@ class _ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 42,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          if (showBackButton)
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                onPressed: onBack,
-                tooltip: 'Voltar',
-                icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-                color: AppColors.darkAmethyst,
-              ),
-            ),
-          Text(
-            'Meu perfil',
-            style: AppTypography.subtitle.copyWith(fontSize: 16),
+    return Row(
+      children: [
+        if (showBackButton)
+          IconButton(
+            onPressed: onBack,
+            tooltip: 'Voltar',
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+            icon: const Icon(Icons.arrow_back_ios_new, size: 22),
+            color: AppColors.darkAmethyst,
           ),
-        ],
-      ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Meu perfil',
+                style: AppTypography.heading.copyWith(
+                  fontSize: 30,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.darkAmethyst,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                'Gerencie suas informações e preferências.',
+                style: AppTypography.body.copyWith(
+                  fontSize: 14,
+                  color: AppColors.darkAmethyst.withValues(alpha: 0.82),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -213,59 +228,90 @@ class _UserSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          clipBehavior: Clip.none,
-          children: [
-            CircleAvatar(
-              radius: 35,
-              backgroundColor: AppColors.sunflowerGold,
-              child: CircleAvatar(
-                radius: 31,
-                backgroundColor: AppColors.hotRose.withValues(alpha: 0.12),
-                child: Text(
-                  user.initials,
-                  style: AppTypography.heading.copyWith(
-                    color: AppColors.hotRose,
-                    fontSize: 23,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.darkAmethyst.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              CircleAvatar(
+                radius: 35,
+                backgroundColor: AppColors.sunflowerGold,
+                child: CircleAvatar(
+                  radius: 31,
+                  backgroundColor: AppColors.hotRose.withValues(alpha: 0.12),
+                  child: Text(
+                    user.initials,
+                    style: AppTypography.heading.copyWith(
+                      color: AppColors.hotRose,
+                      fontSize: 23,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              right: -2,
-              bottom: -1,
-              child: Material(
-                color: AppColors.hotRose,
-                shape: const CircleBorder(),
-                child: InkWell(
-                  onTap: onEditPhoto,
-                  customBorder: const CircleBorder(),
-                  child: const Padding(
-                    padding: EdgeInsets.all(6),
-                    child: Icon(Icons.edit, color: Colors.white, size: 13),
+              Positioned(
+                right: -2,
+                bottom: -1,
+                child: Material(
+                  color: AppColors.hotRose,
+                  shape: const CircleBorder(),
+                  child: InkWell(
+                    onTap: onEditPhoto,
+                    customBorder: const CircleBorder(),
+                    child: const Padding(
+                      padding: EdgeInsets.all(6),
+                      child: Icon(Icons.edit, color: Colors.white, size: 13),
+                    ),
                   ),
                 ),
               ),
+            ],
+          ),
+          const SizedBox(width: 18),
+          Container(width: 1, height: 72, color: AppColors.lavenderVeil),
+          const SizedBox(width: 18),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  user.fullName,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.subtitle.copyWith(
+                    color: AppColors.darkAmethyst,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  user.email,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.caption.copyWith(
+                    color: AppColors.nightBordeaux,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Text(
-          user.fullName,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: AppTypography.subtitle.copyWith(fontSize: 18),
-        ),
-        const SizedBox(height: 1),
-        Text(
-          user.email,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: AppTypography.caption.copyWith(fontSize: 14),
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -290,16 +336,20 @@ class _ProfileOption extends StatelessWidget {
         color: Colors.white,
         elevation: 1,
         shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(22),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(22),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
             child: Row(
               children: [
-                Icon(icon, color: AppColors.darkAmethyst, size: 24),
-                const SizedBox(width: 10),
+                SizedBox(
+                  height: 48,
+                  width: 48,
+                  child: Icon(icon, color: AppColors.hotRose, size: 23),
+                ),
+                const SizedBox(width: 14),
                 Expanded(
                   child: Text(
                     label,
@@ -331,21 +381,20 @@ class _SignOutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: OutlinedButton(
+      child: FilledButton.icon(
         onPressed: onTap,
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.hotRose,
-          side: const BorderSide(color: AppColors.hotRose),
+        icon: const Icon(Icons.logout_outlined, size: 24),
+        label: const Text('Sair da conta'),
+        style: FilledButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: AppColors.hotRose,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(28),
           ),
           minimumSize: const Size.fromHeight(54),
           padding: const EdgeInsets.symmetric(vertical: 14),
-        ),
-        child: Text(
-          'Sair da conta',
-          style: AppTypography.body.copyWith(
-            color: AppColors.hotRose,
+          textStyle: AppTypography.body.copyWith(
+            color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.w700,
           ),

@@ -42,44 +42,54 @@ class _ShelterDetailScreenState extends State<ShelterDetailScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.softBackground,
-      body: SafeArea(
-        child: Column(
-          children: [
-            _DetailHeader(onBack: () => Navigator.of(context).pop()),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(18, 4, 18, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _ShelterImage(shelter: shelter),
-                    const SizedBox(height: 14),
-                    _IdentitySection(
-                      shelter: shelter,
-                      isFavorite: _isFavorite,
-                      onFavorite: _toggleFavorite,
-                    ),
-                    const SizedBox(height: 14),
-                    _Characteristics(shelter: shelter),
-                    const SizedBox(height: 18),
-                    _StructureSection(features: shelter.features),
-                    const SizedBox(height: 18),
-                    _InformationSection(shelter: shelter),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Dados demonstrativos. As informações não representam '
-                      'disponibilidade ou condições verificadas em tempo real.',
-                      textAlign: TextAlign.center,
-                      style: AppTypography.caption.copyWith(
-                        color: AppColors.nightBordeaux.withValues(alpha: 0.75),
-                        fontSize: 13,
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/all_img.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              _DetailHeader(onBack: () => Navigator.of(context).pop()),
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(18, 4, 18, 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _ShelterImage(shelter: shelter),
+                      const SizedBox(height: 14),
+                      _IdentitySection(
+                        shelter: shelter,
+                        isFavorite: _isFavorite,
+                        onFavorite: _toggleFavorite,
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 14),
+                      _Characteristics(shelter: shelter),
+                      const SizedBox(height: 18),
+                      _StructureSection(features: shelter.features),
+                      const SizedBox(height: 18),
+                      _InformationSection(shelter: shelter),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Dados demonstrativos. As informações não representam '
+                        'disponibilidade ou condições verificadas em tempo real.',
+                        textAlign: TextAlign.center,
+                        style: AppTypography.caption.copyWith(
+                          color: AppColors.nightBordeaux.withValues(
+                            alpha: 0.75,
+                          ),
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -93,21 +103,42 @@ class _DetailHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 52,
-      child: Stack(
-        alignment: Alignment.center,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 20, 18, 10),
+      child: Row(
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: IconButton(
-              onPressed: onBack,
-              tooltip: 'Voltar',
-              icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-              color: AppColors.darkAmethyst,
+          IconButton(
+            onPressed: onBack,
+            tooltip: 'Voltar',
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+            icon: const Icon(Icons.arrow_back_ios_new, size: 22),
+            color: AppColors.darkAmethyst,
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Detalhes do abrigo',
+                  style: AppTypography.heading.copyWith(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.darkAmethyst,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'Informações sobre o local selecionado.',
+                  style: AppTypography.body.copyWith(
+                    fontSize: 14,
+                    color: AppColors.darkAmethyst.withValues(alpha: 0.82),
+                  ),
+                ),
+              ],
             ),
           ),
-          Text('Abrigo', style: AppTypography.subtitle.copyWith(fontSize: 17)),
         ],
       ),
     );
@@ -124,7 +155,7 @@ class _ShelterImage extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1.95,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(22),
         child: shelter.imageAsset == null
             ? DecoratedBox(
                 decoration: BoxDecoration(
@@ -211,7 +242,7 @@ class _IdentitySection extends StatelessWidget {
               ? 'Remover dos favoritos'
               : 'Adicionar aos favoritos',
           icon: Icon(
-            isFavorite ? Icons.bookmark : Icons.bookmark_border,
+            isFavorite ? Icons.favorite : Icons.favorite_border,
             color: AppColors.hotRose,
             size: 24,
           ),
@@ -265,11 +296,7 @@ class _Characteristic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(16),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -428,10 +455,10 @@ class _SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 11, 12, 7),
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 12),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.65),
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

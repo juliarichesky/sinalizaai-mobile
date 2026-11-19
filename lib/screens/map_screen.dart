@@ -159,44 +159,73 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.softBackground,
+      backgroundColor: Colors.white,
       bottomNavigationBar: widget.showBottomNavigation
           ? AppBottomNavigation(selectedIndex: 1, onItemSelected: _navigate)
           : null,
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: _goBack,
-                    tooltip: 'Voltar',
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(
-                      minWidth: 48,
-                      minHeight: 48,
-                    ),
-                    icon: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: AppColors.darkAmethyst,
-                      size: 18,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: _SearchBar(
-                      controller: _searchController,
-                      focusNode: _searchFocusNode,
-                      onChanged: (value) =>
-                          setState(() => _searchQuery = value),
-                      onLocationTap: () => _showMessage(
-                        'A localização estará disponível em breve.',
+            DecoratedBox(
+              decoration: const BoxDecoration(color: Colors.white),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(18, 20, 18, 10),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: _goBack,
+                      tooltip: 'Voltar',
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(
+                        minWidth: 48,
+                        minHeight: 48,
+                      ),
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: AppColors.darkAmethyst,
+                        size: 22,
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Mapa',
+                            style: AppTypography.heading.copyWith(
+                              color: AppColors.darkAmethyst,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Visualize semáforos, abrigos e condições da região.',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTypography.body.copyWith(
+                              color: AppColors.darkAmethyst.withValues(
+                                alpha: 0.82,
+                              ),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 14, 18, 8),
+              child: _SearchBar(
+                controller: _searchController,
+                focusNode: _searchFocusNode,
+                onChanged: (value) => setState(() => _searchQuery = value),
+                onLocationTap: () =>
+                    _showMessage('A localização estará disponível em breve.'),
               ),
             ),
             if (_selectedMode == _MapMode.trafficLights &&
@@ -206,6 +235,13 @@ class _MapScreenState extends State<MapScreen> {
                 indexes: _matchingPointIndexes,
                 onSelected: _selectTrafficPoint,
               ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 4, 18, 12),
+              child: _MapModeSelector(
+                selectedMode: _selectedMode,
+                onSelected: _selectMode,
+              ),
+            ),
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -261,7 +297,7 @@ class _MapScreenState extends State<MapScreen> {
                         Positioned(
                           left: 14,
                           right: 14,
-                          bottom: 70,
+                          bottom: 14,
                           child: _PointInfoCard(
                             point: _selectedPoint,
                             onDetails: () =>
@@ -273,7 +309,7 @@ class _MapScreenState extends State<MapScreen> {
                         Positioned(
                           left: 14,
                           right: 14,
-                          bottom: 70,
+                          bottom: 14,
                           child: _ShelterInfoCard(
                             shelter: _mappedShelters[_selectedShelterIndex!],
                             onDetails: () => Navigator.of(context).push(
@@ -286,15 +322,6 @@ class _MapScreenState extends State<MapScreen> {
                             ),
                           ),
                         ),
-                      Positioned(
-                        left: 14,
-                        right: 14,
-                        bottom: 12,
-                        child: _MapModeSelector(
-                          selectedMode: _selectedMode,
-                          onSelected: _selectMode,
-                        ),
-                      ),
                     ],
                   );
                 },
@@ -323,25 +350,26 @@ class _SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white.withValues(alpha: 0.72),
-      elevation: 2,
+      color: Colors.white,
+      elevation: 4,
       shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.12),
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(22),
       child: TextField(
         controller: controller,
         focusNode: focusNode,
         onChanged: onChanged,
         textInputAction: TextInputAction.search,
-        style: AppTypography.body.copyWith(fontSize: 13),
+        style: AppTypography.body.copyWith(fontSize: 16),
         decoration: InputDecoration(
           hintText: 'Buscar endereço',
           hintStyle: AppTypography.caption.copyWith(
-            color: AppColors.nightBordeaux.withValues(alpha: 0.75),
+            color: AppColors.nightBordeaux.withValues(alpha: 0.58),
+            fontSize: 16,
           ),
           prefixIcon: const Icon(
             Icons.search,
             color: AppColors.nightBordeaux,
-            size: 19,
+            size: 25,
           ),
           suffixIcon: IconButton(
             onPressed: onLocationTap,
@@ -349,11 +377,11 @@ class _SearchBar extends StatelessWidget {
             icon: const Icon(
               Icons.my_location_outlined,
               color: AppColors.darkAmethyst,
-              size: 18,
+              size: 24,
             ),
           ),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(vertical: 16),
         ),
       ),
     );
@@ -435,9 +463,9 @@ class _MapModeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white.withValues(alpha: 0.9),
-      borderRadius: BorderRadius.circular(18),
-      elevation: 2,
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(24),
+      elevation: 4,
       shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.14),
       child: Padding(
         padding: const EdgeInsets.all(4),
@@ -489,12 +517,12 @@ class _MapModeChip extends StatelessWidget {
       label: label,
       child: Material(
         color: isSelected ? AppColors.hotRose : Colors.transparent,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(20),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(20),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+            padding: const EdgeInsets.symmetric(vertical: 11, horizontal: 6),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -575,40 +603,80 @@ class _ShelterInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.white.withValues(alpha: 0.94),
+      color: Colors.white,
       elevation: 4,
       shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.18),
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(24),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
-        child: Row(
+        padding: const EdgeInsets.fromLTRB(16, 10, 10, 14),
+        child: Column(
           children: [
             Container(
-              height: 40,
-              width: 40,
+              height: 4,
+              width: 54,
               decoration: BoxDecoration(
-                color: AppColors.hotRose.withValues(alpha: 0.13),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.home_work_outlined,
-                color: AppColors.hotRose,
-                size: 22,
+                color: AppColors.darkAmethyst.withValues(alpha: 0.28),
+                borderRadius: BorderRadius.circular(4),
               ),
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                shelter.name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: AppTypography.subtitle.copyWith(fontSize: 16),
-              ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Container(
+                  height: 48,
+                  width: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.hotRose.withValues(alpha: 0.13),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.home_work_outlined,
+                    color: AppColors.hotRose,
+                    size: 25,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    shelter.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.subtitle.copyWith(
+                      color: AppColors.darkAmethyst,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                _DetailsButton(onPressed: onDetails),
+              ],
             ),
-            TextButton(onPressed: onDetails, child: const Text('Ver detalhes')),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _DetailsButton extends StatelessWidget {
+  const _DetailsButton({required this.onPressed});
+
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: AppColors.darkAmethyst,
+        side: const BorderSide(color: AppColors.darkAmethyst),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        minimumSize: const Size(48, 44),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+      ),
+      icon: const Icon(Icons.chevron_right, size: 20),
+      label: const Text('Detalhes'),
     );
   }
 }
@@ -666,72 +734,92 @@ class _PointInfoCard extends StatelessWidget {
     final icon = point.kind == MapPointKind.flood ? Icons.water : Icons.traffic;
 
     return Material(
-      color: Colors.white.withValues(alpha: 0.92),
+      color: Colors.white,
       elevation: 4,
       shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.18),
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(24),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        child: Row(
+        padding: const EdgeInsets.fromLTRB(16, 10, 10, 14),
+        child: Column(
           children: [
             Container(
-              height: 42,
-              width: 42,
+              height: 4,
+              width: 54,
               decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.14),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: color, size: 24),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    point.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTypography.subtitle.copyWith(
-                      fontSize: 13,
-                      color: AppColors.darkAmethyst,
-                    ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text.rich(
-                    TextSpan(
-                      text: 'Status: ',
-                      style: AppTypography.caption,
-                      children: [
-                        TextSpan(
-                          text: point.status,
-                          style: AppTypography.caption.copyWith(
-                            color: color,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text.rich(
-                    TextSpan(
-                      text: 'Fluxo: ',
-                      style: AppTypography.caption,
-                      children: [
-                        TextSpan(
-                          text: point.flow,
-                          style: AppTypography.caption.copyWith(
-                            color: color,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                color: AppColors.darkAmethyst.withValues(alpha: 0.28),
+                borderRadius: BorderRadius.circular(4),
               ),
             ),
-            TextButton(onPressed: onDetails, child: const Text('Ver detalhes')),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.14),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, color: color, size: 27),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  width: 1,
+                  height: 52,
+                  color: AppColors.darkAmethyst.withValues(alpha: 0.14),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        point.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.subtitle.copyWith(
+                          fontSize: 16,
+                          color: AppColors.darkAmethyst,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text.rich(
+                        TextSpan(
+                          text: 'Status: ',
+                          style: AppTypography.caption,
+                          children: [
+                            TextSpan(
+                              text: point.status,
+                              style: AppTypography.caption.copyWith(
+                                color: color,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text.rich(
+                        TextSpan(
+                          text: 'Fluxo: ',
+                          style: AppTypography.caption,
+                          children: [
+                            TextSpan(
+                              text: point.flow,
+                              style: AppTypography.caption.copyWith(
+                                color: color,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                _DetailsButton(onPressed: onDetails),
+              ],
+            ),
           ],
         ),
       ),
