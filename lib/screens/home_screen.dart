@@ -96,12 +96,13 @@ class HomeScreen extends StatelessWidget {
                         childAspectRatio: 1.22,
                         children: [
                           _FeatureCard(
-                            icon: Icons.traffic,
-                            title: 'Trânsito',
-                            description: 'Semáforos e fluxo',
-                            onTap: () => _showMessage(
-                              context,
-                              'Trânsito estará disponível em breve.',
+                            icon: Icons.location_on_outlined,
+                            title: 'Mapa',
+                            description: 'Visualizar região',
+                            onTap: () => Navigator.of(context).pushReplacement(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const MapScreen(),
+                              ),
                             ),
                           ),
                           _FeatureCard(
@@ -120,15 +121,6 @@ class HomeScreen extends StatelessWidget {
                             onTap: () => _showMessage(
                               context,
                               'Alertas estarão disponíveis em breve.',
-                            ),
-                          ),
-                          _FeatureCard(
-                            icon: Icons.location_on_outlined,
-                            title: 'Mapa',
-                            description: 'Visualizar região',
-                            onTap: () => _showMessage(
-                              context,
-                              'O mapa estará disponível em breve.',
                             ),
                           ),
                           _FeatureCard(

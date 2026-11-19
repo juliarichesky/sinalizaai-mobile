@@ -7,8 +7,9 @@ import 'package:meu_app/screens/home_screen.dart';
 import 'package:meu_app/screens/map_screen.dart';
 
 void main() {
-  testWidgets('navega da Splash Screen para o Login',
-      (WidgetTester tester) async {
+  testWidgets('navega da Splash Screen para o Login', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(const MyApp());
 
     expect(find.text('Sinaliza.Ai'), findsOneWidget);
@@ -22,8 +23,9 @@ void main() {
     expect(find.text('Entrar'), findsOneWidget);
   });
 
-  testWidgets('valida os campos obrigatórios do Login',
-      (WidgetTester tester) async {
+  testWidgets('valida os campos obrigatórios do Login', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(const MyApp());
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
@@ -35,8 +37,9 @@ void main() {
     expect(find.text('Informe sua senha.'), findsOneWidget);
   });
 
-  testWidgets('entra na Home quando o Login é válido',
-      (WidgetTester tester) async {
+  testWidgets('entra na Home quando o Login é válido', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(const MyApp());
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
@@ -52,8 +55,9 @@ void main() {
     expect(find.text('Alertas da sua região'), findsOneWidget);
   });
 
-  testWidgets('navega para Cadastro e exige aceite dos termos',
-      (WidgetTester tester) async {
+  testWidgets('navega para Cadastro e exige aceite dos termos', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(const MyApp());
     await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
@@ -81,15 +85,15 @@ void main() {
     expect(find.text('Entrar na sua conta'), findsOneWidget);
   });
 
-  testWidgets('exibe os cards e a navegação da Home',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: HomeScreen()),
-    );
+  testWidgets('exibe os cards e a navegação da Home', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
 
     expect(find.text('Olá, Julia! 👋'), findsOneWidget);
-    expect(find.text('Trânsito'), findsOneWidget);
+    expect(find.text('Trânsito'), findsNothing);
     expect(find.text('Acessibilidade'), findsOneWidget);
+    expect(find.text('Abrigos'), findsAtLeastNWidgets(1));
     expect(find.text('Alertas'), findsAtLeastNWidgets(1));
     expect(find.text('Mapa'), findsAtLeastNWidgets(1));
     expect(find.text('Alertas da sua região'), findsOneWidget);
@@ -101,11 +105,10 @@ void main() {
     expect(find.text('Buscar endereço'), findsOneWidget);
   });
 
-  testWidgets('busca e seleciona um ponto mockado no Mapa',
-      (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: MapScreen()),
-    );
+  testWidgets('busca e seleciona um ponto mockado no Mapa', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: MapScreen()));
 
     expect(find.text('Semáforo Av. Paulista'), findsOneWidget);
 
@@ -120,9 +123,7 @@ void main() {
   });
 
   testWidgets('filtra os alertas por categoria', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(home: AlertsScreen()),
-    );
+    await tester.pumpWidget(const MaterialApp(home: AlertsScreen()));
 
     expect(find.text('Risco de enchente'), findsOneWidget);
     expect(find.text('Trânsito intenso'), findsOneWidget);

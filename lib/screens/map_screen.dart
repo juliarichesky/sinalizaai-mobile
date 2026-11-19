@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 import '../data/mock_map_points.dart';
+import '../data/mock_shelters.dart';
 import '../widgets/app_bottom_navigation.dart';
 import 'alerts_screen.dart';
 import 'home_screen.dart';
+import 'shelter_detail_screen.dart';
 import 'shelters_screen.dart';
+
+enum _MapMode { trafficLights, shelters }
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -18,10 +22,19 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final _searchController = TextEditingController();
   final _searchFocusNode = FocusNode();
-  int _selectedPointIndex = 0;
+  _MapMode _selectedMode = _MapMode.trafficLights;
+  int _selectedTrafficIndex = 0;
+  int? _selectedShelterIndex;
   String _searchQuery = '';
 
-  MapPoint get _selectedPoint => mockMapPoints[_selectedPointIndex];
+  List<MapPoint> get _trafficPoints => mockMapPoints
+      .where((point) => point.kind == MapPointKind.trafficLight)
+      .toList();
+
+  List<Shelter> get _mappedShelters =>
+      mockShelters.where((shelter) => shelter.mapPosition != null).toList();
+
+  MapPoint get _selectedPoint => _trafficPoints[_selectedTrafficIndex];
 
   List<int> get _matchingPointIndexes {
     final query = _searchQuery.trim().toLowerCase();
@@ -30,8 +43,8 @@ class _MapScreenState extends State<MapScreen> {
     }
 
     return [
-      for (var index = 0; index < mockMapPoints.length; index++)
-        if (mockMapPoints[index].name.toLowerCase().contains(query)) index,
+      for (var index = 0; index < _trafficPoints.length; index++)
+        if (_trafficPoints[index].name.toLowerCase().contains(query)) index,
     ];
   }
 
@@ -42,13 +55,30 @@ class _MapScreenState extends State<MapScreen> {
     super.dispose();
   }
 
-  void _selectPoint(int index) {
+  void _selectTrafficPoint(int index) {
     setState(() {
-      _selectedPointIndex = index;
+      _selectedTrafficIndex = index;
       _searchQuery = '';
       _searchController.clear();
     });
     _searchFocusNode.unfocus();
+  }
+
+  void _selectMode(_MapMode mode) {
+    setState(() {
+      _selectedMode = mode;
+      _selectedShelterIndex = null;
+      _searchQuery = '';
+      _searchController.clear();
+    });
+    _searchFocusNode.unfocus();
+    if (mode == _MapMode.shelters && _mappedShelters.isEmpty) {
+      _showMessage('Os abrigos ainda não possuem localização no mapa.');
+    }
+  }
+
+  void _selectShelter(int index) {
+    setState(() => _selectedShelterIndex = index);
   }
 
   void _showMessage(String message) {
@@ -103,10 +133,12 @@ class _MapScreenState extends State<MapScreen> {
                     _showMessage('A localização estará disponível em breve.'),
               ),
             ),
-            if (_searchQuery.trim().isNotEmpty)
+            if (_selectedMode == _MapMode.trafficLights &&
+                _searchQuery.trim().isNotEmpty)
               _SearchResults(
+                points: _trafficPoints,
                 indexes: _matchingPointIndexes,
-                onSelected: _selectPoint,
+                onSelected: _selectTrafficPoint,
               ),
             Expanded(
               child: LayoutBuilder(
@@ -117,27 +149,81 @@ class _MapScreenState extends State<MapScreen> {
                       const ClipRect(
                         child: CustomPaint(painter: _MapPainter()),
                       ),
-                      for (var index = 0; index < mockMapPoints.length; index++)
+                      if (_selectedMode == _MapMode.trafficLights)
+                        for (
+                          var index = 0;
+                          index < _trafficPoints.length;
+                          index++
+                        )
+                          Positioned(
+                            left:
+                                _trafficPoints[index].position.dx *
+                                    constraints.maxWidth -
+                                24,
+                            top:
+                                _trafficPoints[index].position.dy *
+                                    constraints.maxHeight -
+                                28,
+                            child: _MapMarker(
+                              point: _trafficPoints[index],
+                              isSelected: index == _selectedTrafficIndex,
+                              onTap: () => _selectTrafficPoint(index),
+                            ),
+                          ),
+                      if (_selectedMode == _MapMode.shelters)
+                        for (
+                          var index = 0;
+                          index < _mappedShelters.length;
+                          index++
+                        )
+                          Positioned(
+                            left:
+                                _mappedShelters[index].mapPosition!.dx *
+                                    constraints.maxWidth -
+                                24,
+                            top:
+                                _mappedShelters[index].mapPosition!.dy *
+                                    constraints.maxHeight -
+                                28,
+                            child: _ShelterMarker(
+                              shelter: _mappedShelters[index],
+                              isSelected: index == _selectedShelterIndex,
+                              onTap: () => _selectShelter(index),
+                            ),
+                          ),
+                      if (_selectedMode == _MapMode.trafficLights)
                         Positioned(
-                          left:
-                              mockMapPoints[index].position.dx *
-                                  constraints.maxWidth -
-                              24,
-                          top:
-                              mockMapPoints[index].position.dy *
-                                  constraints.maxHeight -
-                              28,
-                          child: _MapMarker(
-                            point: mockMapPoints[index],
-                            isSelected: index == _selectedPointIndex,
-                            onTap: () => _selectPoint(index),
+                          left: 14,
+                          right: 14,
+                          bottom: 70,
+                          child: _PointInfoCard(point: _selectedPoint),
+                        ),
+                      if (_selectedMode == _MapMode.shelters &&
+                          _selectedShelterIndex != null)
+                        Positioned(
+                          left: 14,
+                          right: 14,
+                          bottom: 70,
+                          child: _ShelterInfoCard(
+                            shelter: _mappedShelters[_selectedShelterIndex!],
+                            onDetails: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => ShelterDetailScreen(
+                                  shelter:
+                                      _mappedShelters[_selectedShelterIndex!],
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       Positioned(
                         left: 14,
                         right: 14,
-                        bottom: 14,
-                        child: _PointInfoCard(point: _selectedPoint),
+                        bottom: 12,
+                        child: _MapModeSelector(
+                          selectedMode: _selectedMode,
+                          onSelected: _selectMode,
+                        ),
                       ),
                     ],
                   );
@@ -205,8 +291,13 @@ class _SearchBar extends StatelessWidget {
 }
 
 class _SearchResults extends StatelessWidget {
-  const _SearchResults({required this.indexes, required this.onSelected});
+  const _SearchResults({
+    required this.points,
+    required this.indexes,
+    required this.onSelected,
+  });
 
+  final List<MapPoint> points;
   final List<int> indexes;
   final ValueChanged<int> onSelected;
 
@@ -240,7 +331,7 @@ class _SearchResults extends StatelessWidget {
               shrinkWrap: true,
               itemCount: indexes.length,
               itemBuilder: (context, position) {
-                final point = mockMapPoints[indexes[position]];
+                final point = points[indexes[position]];
                 return Material(
                   color: Colors.transparent,
                   child: ListTile(
@@ -258,6 +349,196 @@ class _SearchResults extends StatelessWidget {
                 );
               },
             ),
+    );
+  }
+}
+
+class _MapModeSelector extends StatelessWidget {
+  const _MapModeSelector({
+    required this.selectedMode,
+    required this.onSelected,
+  });
+
+  final _MapMode selectedMode;
+  final ValueChanged<_MapMode> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white.withValues(alpha: 0.9),
+      borderRadius: BorderRadius.circular(18),
+      elevation: 2,
+      shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.14),
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          children: [
+            Expanded(
+              child: _MapModeChip(
+                icon: Icons.traffic,
+                label: 'Semáforos',
+                isSelected: selectedMode == _MapMode.trafficLights,
+                onTap: () => onSelected(_MapMode.trafficLights),
+              ),
+            ),
+            Expanded(
+              child: _MapModeChip(
+                icon: Icons.home_work_outlined,
+                label: 'Abrigos',
+                isSelected: selectedMode == _MapMode.shelters,
+                onTap: () => onSelected(_MapMode.shelters),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MapModeChip extends StatelessWidget {
+  const _MapModeChip({
+    required this.icon,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isSelected ? Colors.white : AppColors.darkAmethyst;
+
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: label,
+      child: Material(
+        color: isSelected ? AppColors.hotRose : Colors.transparent,
+        borderRadius: BorderRadius.circular(14),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(14),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: color, size: 16),
+                const SizedBox(width: 5),
+                Flexible(
+                  child: Text(
+                    label,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.caption.copyWith(
+                      color: color,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ShelterMarker extends StatelessWidget {
+  const _ShelterMarker({
+    required this.shelter,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final Shelter shelter;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: shelter.name,
+      child: GestureDetector(
+        onTap: onTap,
+        child: SizedBox(
+          height: 56,
+          width: 48,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Icon(
+                Icons.location_on,
+                color: AppColors.hotRose,
+                size: isSelected ? 52 : 48,
+              ),
+              Positioned(
+                top: 8,
+                child: Icon(
+                  Icons.home_work_outlined,
+                  color: Colors.white,
+                  size: 18,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ShelterInfoCard extends StatelessWidget {
+  const _ShelterInfoCard({required this.shelter, required this.onDetails});
+
+  final Shelter shelter;
+  final VoidCallback onDetails;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white.withValues(alpha: 0.94),
+      elevation: 4,
+      shadowColor: AppColors.darkAmethyst.withValues(alpha: 0.18),
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
+        child: Row(
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                color: AppColors.hotRose.withValues(alpha: 0.13),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.home_work_outlined,
+                color: AppColors.hotRose,
+                size: 22,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                shelter.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.subtitle.copyWith(fontSize: 12),
+              ),
+            ),
+            TextButton(onPressed: onDetails, child: const Text('Ver detalhes')),
+          ],
+        ),
+      ),
     );
   }
 }
