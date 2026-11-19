@@ -170,240 +170,282 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: AppColors.softBackground,
+        statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: AppColors.softBackground,
+        systemNavigationBarColor: Colors.transparent,
         systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarContrastEnforced: false,
       ),
       child: Scaffold(
-        backgroundColor: AppColors.softBackground,
-        body: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: constraints.maxHeight - 32,
-                  ),
-                  child: FocusTraversalGroup(
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: IconButton(
-                              tooltip: 'Voltar',
-                              onPressed: () => Navigator.of(context).pop(),
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(
-                                minWidth: 48,
-                                minHeight: 48,
-                              ),
-                              icon: const Icon(
-                                Icons.arrow_back,
-                                color: AppColors.darkAmethyst,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 18),
-                          Text(
-                            'Criar conta',
-                            style: AppTypography.heading.copyWith(fontSize: 22),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            'Preencha seus dados para começar a usar o Sinaliza.Ai.',
-                            style: AppTypography.caption.copyWith(fontSize: 13),
-                          ),
-                          const SizedBox(height: 18),
-                          TextFormField(
-                            controller: _nameController,
-                            focusNode: _nameFocusNode,
-                            readOnly: false,
-                            keyboardType: TextInputType.text,
-                            textCapitalization: TextCapitalization.words,
-                            autocorrect: true,
-                            enableSuggestions: true,
-                            textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (_) =>
-                                _emailFocusNode.requestFocus(),
-                            onEditingComplete: () =>
-                                _emailFocusNode.requestFocus(),
-                            onChanged: _validateAfterEdit,
-                            autovalidateMode: _hasSubmitted
-                                ? AutovalidateMode.onUserInteraction
-                                : AutovalidateMode.disabled,
-                            validator: _validateName,
-                            style: AppTypography.body.copyWith(fontSize: 14),
-                            decoration: _inputDecoration(
-                              label: 'Nome completo',
-                              icon: Icons.person_outline,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _emailController,
-                            focusNode: _emailFocusNode,
-                            readOnly: false,
-                            keyboardType: TextInputType.emailAddress,
-                            autocorrect: false,
-                            enableSuggestions: false,
-                            textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (_) =>
-                                _passwordFocusNode.requestFocus(),
-                            onEditingComplete: () =>
-                                _passwordFocusNode.requestFocus(),
-                            onChanged: _validateAfterEdit,
-                            autovalidateMode: _hasSubmitted
-                                ? AutovalidateMode.onUserInteraction
-                                : AutovalidateMode.disabled,
-                            validator: _validateEmail,
-                            style: AppTypography.body.copyWith(fontSize: 14),
-                            decoration: _inputDecoration(
-                              label: 'E-mail',
-                              icon: Icons.mail_outline,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _passwordController,
-                            focusNode: _passwordFocusNode,
-                            readOnly: false,
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: _obscurePassword,
-                            autocorrect: false,
-                            enableSuggestions: false,
-                            textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (_) =>
-                                _confirmPasswordFocusNode.requestFocus(),
-                            onEditingComplete: () =>
-                                _confirmPasswordFocusNode.requestFocus(),
-                            onChanged: _validateAfterEdit,
-                            autovalidateMode: _hasSubmitted
-                                ? AutovalidateMode.onUserInteraction
-                                : AutovalidateMode.disabled,
-                            validator: _validatePassword,
-                            style: AppTypography.body.copyWith(fontSize: 14),
-                            decoration: _inputDecoration(
-                              label: 'Senha',
-                              icon: Icons.lock_outline,
-                              suffixIcon: _passwordVisibilityButton(
-                                obscureText: _obscurePassword,
-                                onPressed: () => setState(
-                                  () => _obscurePassword = !_obscurePassword,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: _confirmPasswordController,
-                            focusNode: _confirmPasswordFocusNode,
-                            readOnly: false,
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: _obscureConfirmation,
-                            autocorrect: false,
-                            enableSuggestions: false,
-                            textInputAction: TextInputAction.done,
-                            onFieldSubmitted: (_) => _submit(),
-                            onEditingComplete: _submit,
-                            onChanged: _validateAfterEdit,
-                            autovalidateMode: _hasSubmitted
-                                ? AutovalidateMode.onUserInteraction
-                                : AutovalidateMode.disabled,
-                            validator: _validateConfirmation,
-                            style: AppTypography.body.copyWith(fontSize: 14),
-                            decoration: _inputDecoration(
-                              label: 'Confirmar senha',
-                              icon: Icons.lock_outline,
-                              suffixIcon: _passwordVisibilityButton(
-                                obscureText: _obscureConfirmation,
-                                onPressed: () => setState(
-                                  () => _obscureConfirmation =
-                                      !_obscureConfirmation,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 14),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              'assets/images/home_register_img.png',
+              fit: BoxFit.cover,
+            ),
+            SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minHeight: constraints.maxHeight - 32,
+                      ),
+                      child: FocusTraversalGroup(
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Checkbox(
-                                value: _acceptedTerms,
-                                activeColor: AppColors.hotRose,
-                                onChanged: (value) => setState(() {
-                                  _acceptedTerms = value ?? false;
-                                  if (_acceptedTerms) {
-                                    _termsError = false;
-                                  }
-                                }),
+                              const SizedBox(height: 47),
+                              SizedBox(
+                                height: 48,
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    Center(
+                                      child: Text(
+                                        'Criar conta',
+                                        textAlign: TextAlign.center,
+                                        style: AppTypography.heading.copyWith(
+                                          fontSize: 22,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      left: 0,
+                                      top: 0,
+                                      child: IconButton(
+                                        tooltip: 'Voltar',
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        padding: EdgeInsets.zero,
+                                        constraints: const BoxConstraints(
+                                          minWidth: 48,
+                                          minHeight: 48,
+                                        ),
+                                        icon: const Icon(
+                                          Icons.arrow_back,
+                                          color: AppColors.darkAmethyst,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 12),
-                                  child: Text.rich(
-                                    TextSpan(
-                                      text: 'Aceito os ',
-                                      style: AppTypography.caption,
-                                      children: [
-                                        TextSpan(
-                                          text: 'Termos de Uso',
-                                          style: AppTypography.caption.copyWith(
-                                            color: AppColors.hotRose,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          recognizer: _termsRecognizer,
-                                        ),
-                                        const TextSpan(text: ' e a '),
-                                        TextSpan(
-                                          text: 'Política de Privacidade',
-                                          style: AppTypography.caption.copyWith(
-                                            color: AppColors.hotRose,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                          recognizer: _privacyRecognizer,
-                                        ),
-                                        const TextSpan(text: '.'),
-                                      ],
+                              const SizedBox(height: 6),
+                              Text(
+                                'Preencha seus dados para começar a usar o Sinaliza.Ai.',
+                                textAlign: TextAlign.center,
+                                style: AppTypography.caption.copyWith(
+                                  fontSize: 13,
+                                ),
+                              ),
+                              const SizedBox(height: 18),
+                              TextFormField(
+                                controller: _nameController,
+                                focusNode: _nameFocusNode,
+                                readOnly: false,
+                                keyboardType: TextInputType.text,
+                                textCapitalization: TextCapitalization.words,
+                                autocorrect: true,
+                                enableSuggestions: true,
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: (_) =>
+                                    _emailFocusNode.requestFocus(),
+                                onEditingComplete: () =>
+                                    _emailFocusNode.requestFocus(),
+                                onChanged: _validateAfterEdit,
+                                autovalidateMode: _hasSubmitted
+                                    ? AutovalidateMode.onUserInteraction
+                                    : AutovalidateMode.disabled,
+                                validator: _validateName,
+                                style: AppTypography.body.copyWith(
+                                  fontSize: 14,
+                                ),
+                                decoration: _inputDecoration(
+                                  label: 'Nome completo',
+                                  icon: Icons.person_outline,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              TextFormField(
+                                controller: _emailController,
+                                focusNode: _emailFocusNode,
+                                readOnly: false,
+                                keyboardType: TextInputType.emailAddress,
+                                autocorrect: false,
+                                enableSuggestions: false,
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: (_) =>
+                                    _passwordFocusNode.requestFocus(),
+                                onEditingComplete: () =>
+                                    _passwordFocusNode.requestFocus(),
+                                onChanged: _validateAfterEdit,
+                                autovalidateMode: _hasSubmitted
+                                    ? AutovalidateMode.onUserInteraction
+                                    : AutovalidateMode.disabled,
+                                validator: _validateEmail,
+                                style: AppTypography.body.copyWith(
+                                  fontSize: 14,
+                                ),
+                                decoration: _inputDecoration(
+                                  label: 'E-mail',
+                                  icon: Icons.mail_outline,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              TextFormField(
+                                controller: _passwordController,
+                                focusNode: _passwordFocusNode,
+                                readOnly: false,
+                                keyboardType: TextInputType.visiblePassword,
+                                obscureText: _obscurePassword,
+                                autocorrect: false,
+                                enableSuggestions: false,
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: (_) =>
+                                    _confirmPasswordFocusNode.requestFocus(),
+                                onEditingComplete: () =>
+                                    _confirmPasswordFocusNode.requestFocus(),
+                                onChanged: _validateAfterEdit,
+                                autovalidateMode: _hasSubmitted
+                                    ? AutovalidateMode.onUserInteraction
+                                    : AutovalidateMode.disabled,
+                                validator: _validatePassword,
+                                style: AppTypography.body.copyWith(
+                                  fontSize: 14,
+                                ),
+                                decoration: _inputDecoration(
+                                  label: 'Senha',
+                                  icon: Icons.lock_outline,
+                                  suffixIcon: _passwordVisibilityButton(
+                                    obscureText: _obscurePassword,
+                                    onPressed: () => setState(
+                                      () =>
+                                          _obscurePassword = !_obscurePassword,
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                          if (_termsError)
-                            Padding(
-                              padding: const EdgeInsets.only(left: 12, top: 2),
-                              child: Text(
-                                'Você precisa aceitar os Termos de Uso e a '
-                                'Política de Privacidade para continuar.',
-                                style: AppTypography.caption.copyWith(
-                                  color: AppColors.nightBordeaux,
+                              const SizedBox(height: 10),
+                              TextFormField(
+                                controller: _confirmPasswordController,
+                                focusNode: _confirmPasswordFocusNode,
+                                readOnly: false,
+                                keyboardType: TextInputType.visiblePassword,
+                                obscureText: _obscureConfirmation,
+                                autocorrect: false,
+                                enableSuggestions: false,
+                                textInputAction: TextInputAction.done,
+                                onFieldSubmitted: (_) => _submit(),
+                                onEditingComplete: _submit,
+                                onChanged: _validateAfterEdit,
+                                autovalidateMode: _hasSubmitted
+                                    ? AutovalidateMode.onUserInteraction
+                                    : AutovalidateMode.disabled,
+                                validator: _validateConfirmation,
+                                style: AppTypography.body.copyWith(
+                                  fontSize: 14,
+                                ),
+                                decoration: _inputDecoration(
+                                  label: 'Confirmar senha',
+                                  icon: Icons.lock_outline,
+                                  suffixIcon: _passwordVisibilityButton(
+                                    obscureText: _obscureConfirmation,
+                                    onPressed: () => setState(
+                                      () => _obscureConfirmation =
+                                          !_obscureConfirmation,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          const SizedBox(height: 18),
-                          SizedBox(
-                            width: double.infinity,
-                            child: AppButton(
-                              text: 'Cadastrar',
-                              onPressed: _submit,
-                            ),
+                              const SizedBox(height: 14),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Checkbox(
+                                    value: _acceptedTerms,
+                                    activeColor: AppColors.hotRose,
+                                    onChanged: (value) => setState(() {
+                                      _acceptedTerms = value ?? false;
+                                      if (_acceptedTerms) {
+                                        _termsError = false;
+                                      }
+                                    }),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 12),
+                                      child: Text.rich(
+                                        TextSpan(
+                                          text: 'Aceito os ',
+                                          style: AppTypography.caption,
+                                          children: [
+                                            TextSpan(
+                                              text: 'Termos de Uso',
+                                              style: AppTypography.caption
+                                                  .copyWith(
+                                                    color: AppColors.hotRose,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                              recognizer: _termsRecognizer,
+                                            ),
+                                            const TextSpan(text: ' e a '),
+                                            TextSpan(
+                                              text: 'Política de Privacidade',
+                                              style: AppTypography.caption
+                                                  .copyWith(
+                                                    color: AppColors.hotRose,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                              recognizer: _privacyRecognizer,
+                                            ),
+                                            const TextSpan(text: '.'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (_termsError)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 12,
+                                    top: 2,
+                                  ),
+                                  child: Text(
+                                    'Você precisa aceitar os Termos de Uso e a '
+                                    'Política de Privacidade para continuar.',
+                                    style: AppTypography.caption.copyWith(
+                                      color: AppColors.nightBordeaux,
+                                    ),
+                                  ),
+                                ),
+                              const SizedBox(height: 18),
+                              SizedBox(
+                                width: double.infinity,
+                                child: AppButton(
+                                  text: 'Cadastrar',
+                                  onPressed: _submit,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              );
-            },
-          ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
