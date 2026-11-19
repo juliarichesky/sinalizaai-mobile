@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
+import 'home_screen.dart';
 import 'register_screen.dart';
 import '../widgets/app_button.dart';
 
@@ -45,13 +46,25 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    _showMessage('Login pronto para integração.');
+    _showMessage('Login realizado com sucesso!');
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
+    );
   }
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text(message)));
+      ..showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: AppColors.hotRose,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      );
   }
 
   void _openRegister() {

@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:meu_app/main.dart';
+import 'package:meu_app/screens/home_screen.dart';
 
 void main() {
   testWidgets('navega da Splash Screen para o Login',
@@ -31,6 +33,23 @@ void main() {
     expect(find.text('Informe sua senha.'), findsOneWidget);
   });
 
+  testWidgets('entra na Home quando o Login é válido',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.pump(const Duration(seconds: 2));
+    await tester.pumpAndSettle();
+
+    final fields = find.byType(TextFormField);
+    await tester.enterText(fields.at(0), 'julia@email.com');
+    await tester.enterText(fields.at(1), 'senha123');
+    await tester.tap(find.text('Entrar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Login realizado com sucesso!'), findsOneWidget);
+    expect(find.text('Olá, Julia! 👋'), findsOneWidget);
+    expect(find.text('Alertas da sua região'), findsOneWidget);
+  });
+
   testWidgets('navega para Cadastro e exige aceite dos termos',
       (WidgetTester tester) async {
     await tester.pumpWidget(const MyApp());
@@ -58,5 +77,25 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Entrar na sua conta'), findsOneWidget);
+  });
+
+  testWidgets('exibe os cards e a navegação da Home',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: HomeScreen()),
+    );
+
+    expect(find.text('Olá, Julia! 👋'), findsOneWidget);
+    expect(find.text('Trânsito'), findsOneWidget);
+    expect(find.text('Acessibilidade'), findsOneWidget);
+    expect(find.text('Alertas'), findsAtLeastNWidgets(1));
+    expect(find.text('Mapa'), findsAtLeastNWidgets(1));
+    expect(find.text('Alertas da sua região'), findsOneWidget);
+    expect(find.text('Início'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.map_outlined));
+    await tester.pump();
+
+    expect(find.text('O mapa estará disponível em breve.'), findsOneWidget);
   });
 }
