@@ -5,6 +5,7 @@ import '../core/theme/app_typography.dart';
 import '../data/mock_user.dart';
 import '../widgets/app_bottom_navigation.dart';
 import 'alerts_screen.dart';
+import 'accessibility_screen.dart';
 import 'map_screen.dart';
 import 'profile_screen.dart';
 import 'shelters_screen.dart';
@@ -109,9 +110,10 @@ class HomeScreen extends StatelessWidget {
                             icon: Icons.accessibility_new,
                             title: 'Acessibilidade',
                             description: 'Rotas inclusivas',
-                            onTap: () => _showMessage(
-                              context,
-                              'Acessibilidade estará disponível em breve.',
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const AccessibilityScreen(),
+                              ),
                             ),
                           ),
                           _FeatureCard(
