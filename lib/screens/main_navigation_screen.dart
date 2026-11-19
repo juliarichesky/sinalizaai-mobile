@@ -17,20 +17,28 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
+  int? _previousIndex;
   late final List<Widget> _screens = [
     HomeScreen(showBottomNavigation: false, onNavigationRequested: _selectTab),
-    MapScreen(showBottomNavigation: false, onNavigationRequested: _selectTab),
+    MapScreen(
+      showBottomNavigation: false,
+      onNavigationRequested: _selectTab,
+      onBackRequested: _goToPreviousTab,
+    ),
     SheltersScreen(
       showBottomNavigation: false,
       onNavigationRequested: _selectTab,
+      onBackRequested: _goToPreviousTab,
     ),
     AlertsScreen(
       showBottomNavigation: false,
       onNavigationRequested: _selectTab,
+      onBackRequested: _goToPreviousTab,
     ),
     ProfileScreen(
       showBottomNavigation: false,
       onNavigationRequested: _selectTab,
+      onBackRequested: _goToPreviousTab,
     ),
   ];
 
@@ -38,7 +46,18 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     if (index == _selectedIndex) {
       return;
     }
+    _previousIndex = _selectedIndex;
     setState(() => _selectedIndex = index);
+  }
+
+  void _goToPreviousTab() {
+    final previousIndex = _previousIndex;
+    _previousIndex = null;
+    if (previousIndex == null || previousIndex == _selectedIndex) {
+      _selectTab(0);
+      return;
+    }
+    setState(() => _selectedIndex = previousIndex);
   }
 
   @override

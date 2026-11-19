@@ -19,10 +19,12 @@ class MapScreen extends StatefulWidget {
     super.key,
     this.showBottomNavigation = true,
     this.onNavigationRequested,
+    this.onBackRequested,
   });
 
   final bool showBottomNavigation;
   final ValueChanged<int>? onNavigationRequested;
+  final VoidCallback? onBackRequested;
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -103,6 +105,24 @@ class _MapScreenState extends State<MapScreen> {
     AppSnackBar.show(context, message);
   }
 
+  void _goBack() {
+    if (widget.onBackRequested != null) {
+      widget.onBackRequested!();
+      return;
+    }
+    if (widget.onNavigationRequested != null) {
+      widget.onNavigationRequested!(0);
+      return;
+    }
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+      return;
+    }
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
+    );
+  }
+
   void _handleNavigation(int index) {
     if (index == 1) {
       return;
@@ -148,12 +168,35 @@ class _MapScreenState extends State<MapScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-              child: _SearchBar(
-                controller: _searchController,
-                focusNode: _searchFocusNode,
-                onChanged: (value) => setState(() => _searchQuery = value),
-                onLocationTap: () =>
-                    _showMessage('A localização estará disponível em breve.'),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: _goBack,
+                    tooltip: 'Voltar',
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                      minWidth: 48,
+                      minHeight: 48,
+                    ),
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      color: AppColors.darkAmethyst,
+                      size: 18,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: _SearchBar(
+                      controller: _searchController,
+                      focusNode: _searchFocusNode,
+                      onChanged: (value) =>
+                          setState(() => _searchQuery = value),
+                      onLocationTap: () => _showMessage(
+                        'A localização estará disponível em breve.',
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             if (_selectedMode == _MapMode.trafficLights &&

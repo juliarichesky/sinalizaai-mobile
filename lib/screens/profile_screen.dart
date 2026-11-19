@@ -16,10 +16,12 @@ class ProfileScreen extends StatelessWidget {
     super.key,
     this.showBottomNavigation = true,
     this.onNavigationRequested,
+    this.onBackRequested,
   });
 
   final bool showBottomNavigation;
   final ValueChanged<int>? onNavigationRequested;
+  final VoidCallback? onBackRequested;
 
   void _showMessage(BuildContext context, String message) {
     AppSnackBar.show(context, message);
@@ -30,6 +32,14 @@ class ProfileScreen extends StatelessWidget {
   }
 
   void _goBack(BuildContext context) {
+    if (onBackRequested != null) {
+      onBackRequested!();
+      return;
+    }
+    if (onNavigationRequested != null) {
+      onNavigationRequested!(0);
+      return;
+    }
     if (Navigator.of(context).canPop()) {
       Navigator.of(context).pop();
       return;
@@ -122,7 +132,7 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     _ProfileHeader(
                       onBack: () => _goBack(context),
-                      showBackButton: showBottomNavigation,
+                      showBackButton: true,
                     ),
                     const SizedBox(height: 20),
                     _UserSummary(

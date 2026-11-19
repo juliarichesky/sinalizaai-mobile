@@ -17,10 +17,12 @@ class SheltersScreen extends StatefulWidget {
     super.key,
     this.showBottomNavigation = true,
     this.onNavigationRequested,
+    this.onBackRequested,
   });
 
   final bool showBottomNavigation;
   final ValueChanged<int>? onNavigationRequested;
+  final VoidCallback? onBackRequested;
 
   @override
   State<SheltersScreen> createState() => _SheltersScreenState();
@@ -48,6 +50,14 @@ class _SheltersScreenState extends State<SheltersScreen> {
   }
 
   void _goBack() {
+    if (widget.onBackRequested != null) {
+      widget.onBackRequested!();
+      return;
+    }
+    if (widget.onNavigationRequested != null) {
+      widget.onNavigationRequested!(0);
+      return;
+    }
     if (Navigator.of(context).canPop()) {
       Navigator.of(context).pop();
       return;
@@ -115,10 +125,7 @@ class _SheltersScreenState extends State<SheltersScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            _SheltersHeader(
-              onBack: _goBack,
-              showBackButton: widget.showBottomNavigation,
-            ),
+            _SheltersHeader(onBack: _goBack, showBackButton: true),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.fromLTRB(18, 8, 18, 16),

@@ -51,8 +51,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Login realizado com sucesso!'), findsOneWidget);
-    expect(find.text('Olá, Julia! 👋'), findsOneWidget);
-    expect(find.text('Alertas da sua região'), findsOneWidget);
+    expect(find.text('Olá, Julia!'), findsOneWidget);
+    expect(find.text('Bem-vindo!'), findsOneWidget);
   });
 
   testWidgets('navega para Cadastro e exige aceite dos termos', (
@@ -88,13 +88,15 @@ void main() {
   ) async {
     await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
 
-    expect(find.text('Olá, Julia! 👋'), findsOneWidget);
+    expect(find.text('Olá, Julia!'), findsOneWidget);
     expect(find.text('Trânsito'), findsNothing);
     expect(find.text('Acessibilidade'), findsOneWidget);
     expect(find.text('Abrigos'), findsAtLeastNWidgets(1));
     expect(find.text('Alertas'), findsAtLeastNWidgets(1));
     expect(find.text('Mapa'), findsAtLeastNWidgets(1));
-    expect(find.text('Alertas da sua região'), findsOneWidget);
+    expect(find.text('Bem-vindo!'), findsOneWidget);
+    expect(find.text('Fique sempre informado'), findsOneWidget);
+    expect(find.byType(Switch), findsOneWidget);
     expect(find.text('Início'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.map_outlined));
@@ -170,7 +172,19 @@ void main() {
 
     await tester.tap(find.text('Início'));
     await tester.pump();
-    expect(find.text('Olá, Julia! 👋'), findsOneWidget);
+    expect(find.text('Olá, Julia!'), findsOneWidget);
+  });
+
+  testWidgets('abre Alertas pelo card da Home', (WidgetTester tester) async {
+    await tester.pumpWidget(const MaterialApp(home: MainNavigationScreen()));
+
+    final alertsCard = find.text('Enchentes e riscos');
+    await tester.ensureVisible(alertsCard);
+    await tester.tap(alertsCard);
+    await tester.pump();
+
+    expect(find.text('Todos'), findsOneWidget);
+    expect(find.text('Alertas'), findsAtLeastNWidgets(1));
   });
 
   testWidgets('abre detalhes a partir do marcador e preserva o mapa', (

@@ -17,10 +17,12 @@ class AlertsScreen extends StatefulWidget {
     super.key,
     this.showBottomNavigation = true,
     this.onNavigationRequested,
+    this.onBackRequested,
   });
 
   final bool showBottomNavigation;
   final ValueChanged<int>? onNavigationRequested;
+  final VoidCallback? onBackRequested;
 
   @override
   State<AlertsScreen> createState() => _AlertsScreenState();
@@ -46,6 +48,24 @@ class _AlertsScreenState extends State<AlertsScreen> {
 
   void _showMessage(String message) {
     AppSnackBar.show(context, message);
+  }
+
+  void _goBack() {
+    if (widget.onBackRequested != null) {
+      widget.onBackRequested!();
+      return;
+    }
+    if (widget.onNavigationRequested != null) {
+      widget.onNavigationRequested!(0);
+      return;
+    }
+    if (Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+      return;
+    }
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
+    );
   }
 
   void _handleNavigation(int index) {
@@ -101,10 +121,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              _AlertsHeader(
-                onBack: () => Navigator.of(context).pop(),
-                showBackButton: widget.showBottomNavigation,
-              ),
+              _AlertsHeader(onBack: _goBack, showBackButton: true),
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
                 child: SingleChildScrollView(
