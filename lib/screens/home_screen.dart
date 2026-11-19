@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
+import '../data/mock_user.dart';
 import '../widgets/app_bottom_navigation.dart';
+import 'alerts_screen.dart';
 import 'map_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  static const String _demoFirstName = 'Julia';
 
   void _showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
@@ -26,11 +27,20 @@ class HomeScreen extends StatelessWidget {
       );
       return;
     }
+    if (index == 3) {
+      Navigator.of(context)
+          .push(MaterialPageRoute<void>(builder: (_) => const AlertsScreen()));
+      return;
+    }
+    if (index == 4) {
+      Navigator.of(context)
+          .push(MaterialPageRoute<void>(builder: (_) => const ProfileScreen()));
+      return;
+    }
 
     final messages = {
       2: 'Ações rápidas estarão disponíveis em breve.',
       3: 'Alertas estarão disponíveis em breve.',
-      4: 'O perfil estará disponível em breve.',
     };
     _showMessage(context, messages[index]!);
   }
@@ -67,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       _Header(
-                        firstName: _demoFirstName,
+                        firstName: mockUser.fullName.split(' ').first,
                         onNotifications: () => _showMessage(
                           context,
                           'As notificações estarão disponíveis em breve.',

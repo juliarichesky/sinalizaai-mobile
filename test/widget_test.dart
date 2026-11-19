@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:meu_app/main.dart';
+import 'package:meu_app/screens/alerts_screen.dart';
 import 'package:meu_app/screens/home_screen.dart';
 import 'package:meu_app/screens/map_screen.dart';
 
@@ -116,5 +117,28 @@ void main() {
     await tester.pump();
 
     expect(find.text('Semáforo Rua Augusta'), findsOneWidget);
+  });
+
+  testWidgets('filtra os alertas por categoria', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: AlertsScreen()),
+    );
+
+    expect(find.text('Risco de enchente'), findsOneWidget);
+    expect(find.text('Trânsito intenso'), findsOneWidget);
+    expect(find.text('Manutenção'), findsOneWidget);
+
+    await tester.tap(find.text('Enchentes'));
+    await tester.pump();
+
+    expect(find.text('Risco de enchente'), findsOneWidget);
+    expect(find.text('Trânsito intenso'), findsNothing);
+    expect(find.text('Manutenção'), findsNothing);
+
+    await tester.tap(find.text('Todos'));
+    await tester.pump();
+
+    expect(find.text('Trânsito intenso'), findsOneWidget);
+    expect(find.text('Manutenção'), findsOneWidget);
   });
 }

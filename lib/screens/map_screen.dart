@@ -4,6 +4,7 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 import '../data/mock_map_points.dart';
 import '../widgets/app_bottom_navigation.dart';
+import 'alerts_screen.dart';
 import 'home_screen.dart';
 
 class MapScreen extends StatefulWidget {
@@ -63,6 +64,11 @@ class _MapScreenState extends State<MapScreen> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
       );
+      return;
+    }
+    if (index == 3) {
+      Navigator.of(context)
+          .push(MaterialPageRoute<void>(builder: (_) => const AlertsScreen()));
       return;
     }
 
