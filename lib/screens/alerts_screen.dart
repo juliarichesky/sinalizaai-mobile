@@ -4,8 +4,8 @@ import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
 import '../data/mock_alerts.dart';
 import '../widgets/app_bottom_navigation.dart';
-import '../widgets/app_snackbar.dart';
 import 'home_screen.dart';
+import 'alert_detail_screen.dart';
 import 'map_screen.dart';
 import 'profile_screen.dart';
 import 'shelters_screen.dart';
@@ -44,10 +44,6 @@ class _AlertsScreenState extends State<AlertsScreen> {
             .where((alert) => alert.category == AlertCategory.traffic)
             .toList();
     }
-  }
-
-  void _showMessage(String message) {
-    AppSnackBar.show(context, message);
   }
 
   void _goBack() {
@@ -192,8 +188,10 @@ class _AlertsScreenState extends State<AlertsScreen> {
                         return _AlertCard(
                           alert: alert,
                           color: _alertColor(alert),
-                          onTap: () => _showMessage(
-                            'Os detalhes deste alerta estarão disponíveis em breve.',
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => AlertDetailScreen(alert: alert),
+                            ),
                           ),
                         );
                       },
