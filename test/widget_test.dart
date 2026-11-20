@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:meu_app/main.dart';
-import 'package:meu_app/screens/alerts_screen.dart';
-import 'package:meu_app/screens/home_screen.dart';
-import 'package:meu_app/screens/main_navigation_screen.dart';
-import 'package:meu_app/screens/map_screen.dart';
-import 'package:meu_app/services/local_auth_service.dart';
+import 'package:sinaliza_ai/main.dart';
+import 'package:sinaliza_ai/data/mock_alerts.dart';
+import 'package:sinaliza_ai/data/mock_map_points.dart';
+import 'package:sinaliza_ai/data/mock_shelters.dart';
+import 'package:sinaliza_ai/screens/alert_detail_screen.dart';
+import 'package:sinaliza_ai/screens/alerts_screen.dart';
+import 'package:sinaliza_ai/screens/accessibility_screen.dart';
+import 'package:sinaliza_ai/screens/home_screen.dart';
+import 'package:sinaliza_ai/screens/main_navigation_screen.dart';
+import 'package:sinaliza_ai/screens/map_screen.dart';
+import 'package:sinaliza_ai/screens/profile_screen.dart';
+import 'package:sinaliza_ai/screens/shelter_detail_screen.dart';
+import 'package:sinaliza_ai/screens/shelters_screen.dart';
+import 'package:sinaliza_ai/screens/traffic_light_detail_screen.dart';
+import 'package:sinaliza_ai/services/local_auth_service.dart';
 
 void main() {
   LocalAuthService.instance.configureInMemoryForTesting();
@@ -88,6 +97,28 @@ void main() {
     expect(find.text('Entrar na sua conta'), findsOneWidget);
   });
 
+  testWidgets('cadastra uma nova conta pela interface', (
+    WidgetTester tester,
+  ) async {
+    LocalAuthService.instance.resetForTesting();
+    await _pumpLogin(tester);
+
+    await tester.tap(find.text('Cadastre-se'));
+    await tester.pumpAndSettle();
+
+    final fields = find.byType(TextFormField);
+    await tester.enterText(fields.at(0), 'Maria da Silva');
+    await tester.enterText(fields.at(1), 'maria@email.com');
+    await tester.enterText(fields.at(2), 'senha123');
+    await tester.enterText(fields.at(3), 'senha123');
+    await tester.tap(find.byType(Checkbox));
+    await tester.tap(find.text('Cadastrar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Cadastro realizado com sucesso!'), findsOneWidget);
+    expect(find.text('Entrar na sua conta'), findsOneWidget);
+  });
+
   testWidgets('exibe os cards e a navegação da Home', (
     WidgetTester tester,
   ) async {
@@ -148,6 +179,24 @@ void main() {
     expect(find.text('Manutenção'), findsOneWidget);
   });
 
+  testWidgets('filtra somente os abrigos favoritos', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: SheltersScreen()));
+
+    expect(find.text('Abrigo Av. Paulista'), findsOneWidget);
+    expect(find.text('Abrigo Consolação'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Adicionar aos favoritos').first);
+    await tester.pump();
+    await tester.tap(find.text('Favoritos'));
+    await tester.pump();
+
+    expect(find.text('Abrigo Av. Paulista'), findsOneWidget);
+    expect(find.text('Abrigo Consolação'), findsNothing);
+    expect(find.byTooltip('Remover dos favoritos'), findsOneWidget);
+  });
+
   testWidgets('mantém as cinco telas principais no host de navegação', (
     WidgetTester tester,
   ) async {
@@ -202,6 +251,108 @@ void main() {
     expect(find.text('Semáforo Av. Paulista'), findsOneWidget);
     expect(find.text('Detalhes'), findsOneWidget);
     expect(find.text('Status: Liberado'), findsOneWidget);
+  });
+
+  testWidgets('exibe os detalhes completos de um alerta', (
+    WidgetTester tester,
+  ) async {
+    final alert = mockAlerts.first;
+    await tester.pumpWidget(
+      MaterialApp(home: AlertDetailScreen(alert: alert)),
+    );
+
+    expect(find.text(alert.title), findsOneWidget);
+    expect(find.text(alert.description), findsOneWidget);
+    expect(find.byTooltip('Voltar'), findsOneWidget);
+  });
+
+  testWidgets('exibe os detalhes de um semáforo', (
+    WidgetTester tester,
+  ) async {
+    final point = mockMapPoints.first;
+    await tester.pumpWidget(
+      MaterialApp(home: TrafficLightDetailScreen(point: point)),
+    );
+
+    expect(find.text(point.name), findsOneWidget);
+    expect(find.text(point.status), findsAtLeastNWidgets(1));
+    expect(find.byTooltip('Voltar'), findsOneWidget);
+  });
+
+  testWidgets('altera o favorito nos detalhes do abrigo', (
+    WidgetTester tester,
+  ) async {
+    bool? favorite;
+    final shelter = mockShelters.first;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ShelterDetailScreen(
+          shelter: shelter,
+          onFavoriteChanged: (value) => favorite = value,
+        ),
+      ),
+    );
+
+    expect(find.text(shelter.name), findsOneWidget);
+    await tester.tap(find.byTooltip('Adicionar aos favoritos'));
+    await tester.pump();
+
+    expect(favorite, isTrue);
+    expect(find.byTooltip('Remover dos favoritos'), findsOneWidget);
+  });
+
+  testWidgets('abre um recurso da tela de acessibilidade', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      const MaterialApp(home: AccessibilityScreen()),
+    );
+
+    expect(find.text('Recursos disponíveis'), findsOneWidget);
+    await tester.tap(find.text('Rotas com rampas'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Caminhos mais acessíveis'), findsOneWidget);
+    expect(find.text('O que observar em uma rampa'), findsOneWidget);
+  });
+
+  testWidgets('confirma o logout pelo perfil', (WidgetTester tester) async {
+    await _prepareTestAccount();
+    await LocalAuthService.instance.login(
+      email: 'julia@email.com',
+      password: 'senha123',
+    );
+    await tester.pumpWidget(const MaterialApp(home: ProfileScreen()));
+
+    await tester.tap(find.text('Sair da conta'));
+    await tester.pumpAndSettle();
+    expect(find.text('Deseja realmente sair da sua conta?'), findsOneWidget);
+
+    await tester.tap(find.text('Sair'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Entrar na sua conta'), findsOneWidget);
+    expect(await LocalAuthService.instance.restoreSession(), isNull);
+  });
+
+  testWidgets('navega pelas subpáginas do perfil', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const MaterialApp(home: ProfileScreen()));
+
+    await tester.tap(find.text('Meus dados'));
+    await tester.pumpAndSettle();
+    expect(find.text('Salvar alterações'), findsOneWidget);
+    expect(find.byType(TextField), findsNWidgets(2));
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Preferências'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Notificações'), findsOneWidget);
+    expect(find.text('Aparência'), findsOneWidget);
+    expect(find.text('Configurações gerais'), findsOneWidget);
   });
 }
 

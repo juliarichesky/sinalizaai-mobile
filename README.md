@@ -107,6 +107,23 @@ real de um local.
 
 ---
 
+## 🧱 Organização do código
+
+O código em `lib` está separado por responsabilidade:
+
+- `core/`: tema, tipografia e validações compartilhadas.
+- `data/`: modelos e dados demonstrativos.
+- `services/`: autenticação, persistência local e credenciais.
+- `screens/`: telas coordenadoras e componentes agrupados por funcionalidade.
+- `widgets/`: componentes visuais reutilizados entre diferentes telas.
+
+As telas coordenadoras concentram estado, eventos e navegação. Cabeçalhos,
+cartões, formulários e demais blocos visuais ficam em arquivos internos da
+respectiva funcionalidade. Essa separação reduz o acoplamento e permite testar
+os fluxos sem concentrar toda a implementação em uma única classe.
+
+---
+
 ## 🚀 Como executar o projeto
 
 ### Pré-requisitos
@@ -178,6 +195,10 @@ As contas são armazenadas localmente. O login só permite acesso com uma conta
 criada anteriormente pelo usuário. O logout encerra a sessão, mas preserva a
 conta para um novo login.
 
+As senhas são derivadas localmente com PBKDF2-HMAC-SHA256 e salt aleatório.
+Contas criadas por versões anteriores continuam compatíveis com a validação
+legada. Para publicação, a autenticação deve ser transferida para uma API.
+
 > A autenticação é local e demonstrativa. Ela não oferece as mesmas garantias
 > de um serviço real com API, servidor, tokens e validação remota.
 
@@ -204,6 +225,8 @@ Os testes estão organizados em:
 
 - test/widget_test.dart
 - test/local_auth_service_test.dart
+- test/auth_validators_test.dart
+- test/app_preferences_test.dart
 
 ---
 

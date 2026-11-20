@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'core/theme/app_theme.dart';
+import 'data/app_preferences.dart';
 import 'screens/login_screen.dart';
 import 'screens/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppPreferences.instance.load();
   runApp(const MyApp());
 }
 

@@ -1,4 +1,4 @@
-package com.example.meu_app
+package br.com.sinalizaai.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 
