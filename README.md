@@ -107,6 +107,23 @@ real de um local.
 
 ---
 
+## 🤖 Uso de inteligência artificial
+
+Este projeto contou com o apoio de ferramentas de inteligência artificial
+durante o processo de desenvolvimento:
+
+- **OpenAI Codex:** utilizado como assistente na escrita, refatoração,
+  organização e revisão do código, além do apoio na criação e execução de
+  testes automatizados.
+- **ChatGPT:** utilizado para auxiliar na criação, revisão e refinamento de
+  prompts empregados ao longo do desenvolvimento do projeto.
+
+As sugestões geradas por inteligência artificial foram analisadas, adaptadas e
+validadas pela equipe, que permanece responsável pelas decisões de arquitetura,
+pela implementação e pelo resultado final do projeto.
+
+---
+
 ## 🧱 Organização do código
 
 O código em `lib` está separado por responsabilidade:
