@@ -45,4 +45,28 @@ const mockAlerts = [
     time: 'Há 1 h',
     icon: Icons.warning_amber_rounded,
   ),
+  MockAlert(
+    title: 'Chuva forte',
+    description: 'Atenção para pontos de acúmulo de água',
+    location: 'Região: Bela Vista',
+    category: AlertCategory.flood,
+    time: 'Há 40 min',
+    icon: Icons.cloudy_snowing,
+  ),
+  MockAlert(
+    title: 'Desvio de trânsito',
+    description: 'Faixa interditada para manutenção viária',
+    location: 'Av. Brigadeiro Luís Antônio',
+    category: AlertCategory.traffic,
+    time: 'Há 50 min',
+    icon: Icons.alt_route,
+  ),
+  MockAlert(
+    title: 'Obra programada',
+    description: 'Intervenção temporária na calçada',
+    location: 'Rua Haddock Lobo',
+    category: AlertCategory.maintenance,
+    time: 'Há 2 h',
+    icon: Icons.construction_outlined,
+  ),
 ];
