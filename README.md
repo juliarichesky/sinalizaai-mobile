@@ -249,6 +249,11 @@ Os testes estão organizados em:
 
 ## 🎬 Vídeo de apresentação
 
+Confira a demonstração do Sinaliza.AI, apresentando as principais telas, navegação e funcionalidades.
+
+### ▶️ [Assistir à apresentação no YouTube](https://youtu.be/l50dm1G89VI)
+
+O vídeo apresenta o aplicativo em execução no ambiente Android.
 
 ---
 
@@ -270,6 +275,7 @@ Entre as evoluções possíveis estão:
 - Persistência em banco de dados remoto.
 - Validação de sessão por tokens.
 - Atualização de trânsito e alertas em tempo real.
+- Câmeras urbanas com imagens do tráfego.
 - Notificações push.
 - Busca real de rotas acessíveis.
 - Geolocalização e busca externa de endereços.
