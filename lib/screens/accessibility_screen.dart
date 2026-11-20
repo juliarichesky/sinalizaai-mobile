@@ -72,8 +72,10 @@ class AccessibilityScreen extends StatelessWidget {
                       icon: Icons.accessibility_new,
                       label: 'Rotas com rampas',
                       onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) => const RampRoutesScreen(),
+                        PageRouteBuilder<void>(
+                          pageBuilder: (_, __, ___) => const RampRoutesScreen(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
                         ),
                       ),
                     ),
@@ -82,8 +84,11 @@ class AccessibilityScreen extends StatelessWidget {
                       icon: Icons.volume_up_outlined,
                       label: 'Semáforos sonoros',
                       onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) => const AudibleTrafficLightsScreen(),
+                        PageRouteBuilder<void>(
+                          pageBuilder: (_, __, ___) =>
+                              const AudibleTrafficLightsScreen(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
                         ),
                       ),
                     ),
@@ -92,8 +97,11 @@ class AccessibilityScreen extends StatelessWidget {
                       icon: Icons.wheelchair_pickup,
                       label: 'Calçadas acessíveis',
                       onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) => const AccessibleSidewalksScreen(),
+                        PageRouteBuilder<void>(
+                          pageBuilder: (_, __, ___) =>
+                              const AccessibleSidewalksScreen(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
                         ),
                       ),
                     ),

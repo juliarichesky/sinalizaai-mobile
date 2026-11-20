@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../core/theme/app_colors.dart';
 import '../core/theme/app_typography.dart';
@@ -31,6 +34,29 @@ class ProfileScreen extends StatelessWidget {
 
   void _showMessage(BuildContext context, String message) {
     AppSnackBar.show(context, message);
+  }
+
+  Future<void> _changePhoto(BuildContext context) async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+    );
+    if (image == null || !context.mounted) {
+      return;
+    }
+
+    try {
+      await LocalAuthService.instance.updateAvatarPath(image.path);
+      if (!context.mounted) return;
+      AppSnackBar.show(
+        context,
+        'Foto de perfil atualizada.',
+        type: AppSnackBarType.success,
+      );
+    } on LocalAuthException catch (error) {
+      if (!context.mounted) return;
+      AppSnackBar.show(context, error.message, type: AppSnackBarType.error);
+    }
   }
 
   void _openOption(BuildContext context, String option) {
@@ -155,11 +181,11 @@ class ProfileScreen extends StatelessWidget {
                       showBackButton: true,
                     ),
                     const SizedBox(height: 20),
-                    _UserSummary(
-                      user: activeUser ?? mockUser,
-                      onEditPhoto: () => _showMessage(
-                        context,
-                        'A troca de foto estará disponível em breve.',
+                    ValueListenableBuilder<MockUser?>(
+                      valueListenable: activeUserNotifier,
+                      builder: (context, user, _) => _UserSummary(
+                        user: user ?? mockUser,
+                        onEditPhoto: () => _changePhoto(context),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -269,17 +295,24 @@ class _UserSummary extends StatelessWidget {
               CircleAvatar(
                 radius: 35,
                 backgroundColor: AppColors.sunflowerGold,
-                child: CircleAvatar(
-                  radius: 31,
-                  backgroundColor: AppColors.hotRose.withValues(alpha: 0.12),
-                  child: Text(
-                    user.initials,
-                    style: AppTypography.heading.copyWith(
-                      color: AppColors.hotRose,
-                      fontSize: 23,
-                    ),
-                  ),
-                ),
+                child: user.avatarUrl != null
+                    ? CircleAvatar(
+                        radius: 31,
+                        backgroundImage: FileImage(File(user.avatarUrl!)),
+                      )
+                    : CircleAvatar(
+                        radius: 31,
+                        backgroundColor: AppColors.hotRose.withValues(
+                          alpha: 0.12,
+                        ),
+                        child: Text(
+                          user.initials,
+                          style: AppTypography.heading.copyWith(
+                            color: AppColors.hotRose,
+                            fontSize: 23,
+                          ),
+                        ),
+                      ),
               ),
               Positioned(
                 right: -2,

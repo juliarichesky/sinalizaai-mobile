@@ -85,6 +85,7 @@ class LocalAuthService {
       _StoredAccount(
         fullName: user.fullName,
         email: user.email,
+        avatarUrl: user.avatarUrl,
         salt: salt,
         passwordHash: _hashPassword(password, salt),
       ),
@@ -111,6 +112,33 @@ class LocalAuthService {
 
     await _writeSessionEmail(account.email);
     final user = account.user;
+    setActiveUser(user);
+    return user;
+  }
+
+  Future<MockUser> updateAvatarPath(String path) async {
+    final current = activeUser;
+    if (current == null) {
+      throw const LocalAuthException('Nenhuma sessão ativa foi encontrada.');
+    }
+
+    final accounts = await _readAccounts();
+    final index = accounts.indexWhere((item) => item.email == current.email);
+    if (index < 0) {
+      throw const LocalAuthException('Não foi possível atualizar a foto.');
+    }
+
+    final account = accounts[index];
+    final updated = _StoredAccount(
+      fullName: account.fullName,
+      email: account.email,
+      avatarUrl: path,
+      salt: account.salt,
+      passwordHash: account.passwordHash,
+    );
+    accounts[index] = updated;
+    await _writeAccounts(accounts);
+    final user = updated.user;
     setActiveUser(user);
     return user;
   }
@@ -231,20 +259,24 @@ class _StoredAccount {
   const _StoredAccount({
     required this.fullName,
     required this.email,
+    required this.avatarUrl,
     required this.salt,
     required this.passwordHash,
   });
 
   final String fullName;
   final String email;
+  final String? avatarUrl;
   final String salt;
   final String passwordHash;
 
-  MockUser get user => MockUser(fullName: fullName, email: email);
+  MockUser get user =>
+      MockUser(fullName: fullName, email: email, avatarUrl: avatarUrl);
 
   Map<String, dynamic> toJson() => {
     'fullName': fullName,
     'email': email,
+    'avatarUrl': avatarUrl,
     'salt': salt,
     'passwordHash': passwordHash,
   };
@@ -253,6 +285,7 @@ class _StoredAccount {
     return _StoredAccount(
       fullName: json['fullName'] as String,
       email: json['email'] as String,
+      avatarUrl: json['avatarUrl'] as String?,
       salt: json['salt'] as String,
       passwordHash: json['passwordHash'] as String,
     );

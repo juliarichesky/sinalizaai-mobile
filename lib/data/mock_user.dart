@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class MockUser {
   const MockUser({required this.fullName, required this.email, this.avatarUrl});
 
@@ -22,11 +24,16 @@ const mockUser = MockUser(
 );
 
 MockUser? activeUser;
+final ValueNotifier<MockUser?> activeUserNotifier = ValueNotifier<MockUser?>(
+  null,
+);
 
 void setActiveUser(MockUser user) {
   activeUser = user;
+  activeUserNotifier.value = user;
 }
 
 void clearActiveUser() {
   activeUser = null;
+  activeUserNotifier.value = null;
 }

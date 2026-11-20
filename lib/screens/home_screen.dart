@@ -319,7 +319,13 @@ class _NotificationInfoCard extends StatelessWidget {
                   activeTrackColor: AppColors.hotRose,
                   inactiveThumbColor: AppColors.hotRose,
                   inactiveTrackColor: Colors.white,
-                  trackOutlineColor: MaterialStatePropertyAll(Colors.white),
+                  trackOutlineColor: MaterialStateProperty.resolveWith(
+                    (states) =>
+                        states.contains(MaterialState.hovered) ||
+                            states.contains(MaterialState.selected)
+                        ? AppColors.hotRose
+                        : Colors.white,
+                  ),
                   trackOutlineWidth: MaterialStatePropertyAll(0),
                   onChanged: (enabled) {
                     appNotificationsEnabled.value = enabled;

@@ -78,8 +78,11 @@ class _MapScreenState extends State<MapScreen> {
   void _openTrafficDetails(int index) {
     _selectTrafficPoint(index);
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => TrafficLightDetailScreen(point: _trafficPoints[index]),
+      PageRouteBuilder<void>(
+        pageBuilder: (_, __, ___) =>
+            TrafficLightDetailScreen(point: _trafficPoints[index]),
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
       ),
     );
   }
@@ -313,11 +316,13 @@ class _MapScreenState extends State<MapScreen> {
                           child: _ShelterInfoCard(
                             shelter: _mappedShelters[_selectedShelterIndex!],
                             onDetails: () => Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder: (_) => ShelterDetailScreen(
+                              PageRouteBuilder<void>(
+                                pageBuilder: (_, __, ___) => ShelterDetailScreen(
                                   shelter:
                                       _mappedShelters[_selectedShelterIndex!],
                                 ),
+                                transitionDuration: Duration.zero,
+                                reverseTransitionDuration: Duration.zero,
                               ),
                             ),
                           ),
