@@ -221,6 +221,6 @@ Future<void> _prepareTestAccount() async {
       password: 'senha123',
     );
   } on LocalAuthException {
-    // A conta pode existir de uma execução anterior do teste.
+    return;
   }
 }
